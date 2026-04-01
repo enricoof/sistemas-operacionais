@@ -6,12 +6,12 @@
     <title>App de Estudo: Sistemas Operacionais</title>
     <style>
         :root {
-            --primary: #4F46E5;
+            --primary: #2563EB;
             --secondary: #10B981;
             --bg-color: #F3F4F6;
             --card-bg: #FFFFFF;
             --text-main: #1F2937;
-            --text-muted: #6B7280;
+            --text-muted: #4B5563;
             --danger: #EF4444;
         }
 
@@ -21,6 +21,12 @@
             color: var(--text-main);
             margin: 0;
             padding: 0;
+            line-height: 1.6;
+        }
+
+        /* TRUQUE PARA ESCONDER AS CITAÇÕES DO SISTEMA DA IA */
+        .cite {
+            display: none !important;
         }
 
         header {
@@ -31,10 +37,8 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
-        header h1 {
-            margin: 0;
-            font-size: 1.5rem;
-        }
+        header h1 { margin: 0; font-size: 1.8rem; }
+        header p { margin: 0.5rem 0 0 0; opacity: 0.9; }
 
         .tabs {
             display: flex;
@@ -48,7 +52,7 @@
 
         .tab-btn {
             flex: 1;
-            min-width: 120px;
+            min-width: 140px;
             padding: 1rem;
             border: none;
             background: none;
@@ -62,25 +66,23 @@
         .tab-btn.active {
             color: var(--primary);
             border-bottom: 3px solid var(--primary);
+            background-color: #EFF6FF;
         }
 
         .tab-content {
             display: none;
             padding: 1.5rem 1rem;
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
         }
 
-        .tab-content.active {
-            display: block;
-        }
+        .tab-content.active { display: block; }
 
-        /* Cartões de Conteúdo */
         .card {
             background: var(--card-bg);
             border-radius: 8px;
             padding: 1.5rem;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
             border-left: 4px solid var(--primary);
         }
@@ -88,7 +90,11 @@
         .card h3 {
             margin-top: 0;
             color: var(--primary);
+            border-bottom: 1px solid #E5E7EB;
+            padding-bottom: 0.5rem;
         }
+
+        .card h4 { color: #374151; margin-bottom: 0.5rem; }
 
         .highlight {
             background-color: #FEF3C7;
@@ -97,17 +103,33 @@
             font-weight: bold;
         }
 
+        .cmd-box {
+            background: #1F2937;
+            color: #10B981;
+            padding: 1rem;
+            border-radius: 6px;
+            font-family: monospace;
+            margin: 0.5rem 0;
+            overflow-x: auto;
+        }
+        
+        .cmd-desc {
+            margin-top: 0.2rem;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
         /* Flashcards */
         .flashcard-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1rem;
+            gap: 1.5rem;
         }
 
         .flashcard {
             background-color: transparent;
             width: 100%;
-            height: 200px;
+            height: 220px;
             perspective: 1000px;
             cursor: pointer;
         }
@@ -123,9 +145,7 @@
             border-radius: 8px;
         }
 
-        .flashcard.flipped .flashcard-inner {
-            transform: rotateY(180deg);
-        }
+        .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
 
         .flashcard-front, .flashcard-back {
             position: absolute;
@@ -136,58 +156,65 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 1rem;
+            padding: 1.5rem;
             box-sizing: border-box;
             border-radius: 8px;
+        }
+
+        .flashcard-front {
             background-color: white;
             border: 2px solid var(--primary);
+            color: var(--text-main);
+            font-weight: bold;
+            font-size: 1.1rem;
         }
 
         .flashcard-back {
             background-color: var(--primary);
             color: white;
             transform: rotateY(180deg);
+            font-size: 0.95rem;
         }
 
         /* Quiz */
         .quiz-question {
             background: white;
-            padding: 1rem;
+            padding: 1.5rem;
             border-radius: 8px;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
         .quiz-option {
             display: block;
-            padding: 0.8rem;
+            padding: 1rem;
             margin: 0.5rem 0;
             border: 1px solid #D1D5DB;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.2s;
         }
 
-        .quiz-option:hover {
-            background: #F9FAFB;
-        }
+        .quiz-option:hover { background: #F9FAFB; }
 
         .quiz-btn {
             background-color: var(--primary);
             color: white;
             border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 4px;
-            font-size: 1rem;
+            padding: 1rem 2rem;
+            border-radius: 6px;
+            font-size: 1.1rem;
             cursor: pointer;
             width: 100%;
             font-weight: bold;
+            margin-top: 1rem;
         }
 
         .correct-answer {
             background-color: #D1FAE5 !important;
             border-color: var(--secondary) !important;
             color: #065F46;
+            font-weight: bold;
         }
 
         .wrong-answer {
@@ -195,147 +222,184 @@
             border-color: var(--danger) !important;
             color: #991B1B;
         }
-
-        code {
-            background: #E5E7EB;
-            padding: 0.2rem 0.4rem;
-            border-radius: 4px;
-            color: #B91C1C;
-            font-family: monospace;
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
         }
+        th, td {
+            border: 1px solid #D1D5DB;
+            padding: 0.5rem;
+            text-align: left;
+        }
+        th { background-color: #F3F4F6; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>📚 App de Revisão: Sistemas Operacionais</h1>
-        <p>Foco na Prova - Linux, Bash e Gestão de Processos</p>
+        <h1>📚 Revisão de SO: Direto ao Ponto</h1>
+        <p>Teoria aprofundada + Comandos de Laboratório</p>
     </header>
 
     <div class="tabs">
-        <button class="tab-btn active" onclick="openTab(event, 'prova')">📝 Prova (Foco)</button>
-        <button class="tab-btn" onclick="openTab(event, 'resumo')">⚡ Resumo Rápido</button>
-        <button class="tab-btn" onclick="openTab(event, 'conteudo')">📖 Conteúdo Completo</button>
+        <button class="tab-btn active" onclick="openTab(event, 'teoria')">🧠 Teoria (Aprofundada)</button>
+        <button class="tab-btn" onclick="openTab(event, 'comandos')">💻 Laboratório (Comandos)</button>
         <button class="tab-btn" onclick="openTab(event, 'flashcards')">🗂️ Flashcards</button>
         <button class="tab-btn" onclick="openTab(event, 'quiz')">🎯 Quiz</button>
     </div>
 
-    <div id="prova" class="tab-content active">
-        <h2>Questões Quentes para a Prova</h2>
+    <div id="teoria" class="tab-content active">
+        <h2>Conceitos Teóricos Fundamentais</h2>
         
         <div class="card">
-            <h3>1. Qual a diferença entre Software Livre e Software Gratuito (Freeware)?</h3>
-            <p>O fato de ser gratuito não implica que o software seja livre[cite: 61]. O software gratuito (freeware) apenas não cobra pela licença de uso, mas seu código-fonte permanece fechado e indisponível[cite: 62]. Já o Software Livre garante ao usuário as liberdades fundamentais de executar, copiar, estudar, modificar e redistribuir o código-fonte, independentemente de ser comercializado ou não[cite: 48, 54, 55, 56].</p>
+            <h3>1. O que é um Sistema Operacional? <span class="cite">[cite: 2957, 2979, 3204]</span></h3>
+            <p>O Sistema Operacional (SO) é o software fundamental que atua como intermediário entre o hardware do computador e os aplicativos do usuário. Ele possui duas grandes responsabilidades clássicas:</p>
+            <ul>
+                <li><strong>Máquina Estendida (ou Virtual):</strong> O hardware nu é complexo e difícil de programar. O SO cria uma "ilusão" de uma máquina muito mais simples, limpa e padronizada (oferecendo abstrações como janelas, arquivos e processos) para que o usuário e o programador não precisem lidar com detalhes físicos do disco ou do processador.</li>
+                <li><strong>Gerenciador de Recursos:</strong> Quando há vários usuários ou programas rodando, o SO gerencia a ordem e o tempo de uso da CPU, a alocação de memória RAM e o acesso aos dispositivos de Entrada/Saída (I/O), garantindo proteção e concorrência ordenada.</li>
+            </ul>
         </div>
 
         <div class="card">
-            <h3>2. Defina o que é um Sistema Operacional (SO) e suas principais funções.</h3>
-            <p>O Sistema Operacional é um programa que atua como intermediário entre o usuário e o hardware do computador[cite: 3794]. Ele opera em duas frentes principais: como um <span class="highlight">gerenciador de recursos</span> (alocando ordenadamente CPU, memória e I/O para os programas) e como uma <span class="highlight">máquina virtual ou estendida</span>, oferecendo abstrações que escondem os detalhes complexos do hardware e facilitam o uso[cite: 12, 14, 15].</p>
+            <h3>2. Arquiteturas e Tipos de SO <span class="cite">[cite: 3491, 3507, 3574, 4304, 4309, 4345]</span></h3>
+            <p>Os SOs evoluíram para lidar com necessidades específicas de processamento:</p>
+            <ul>
+                <li><strong>Batch (Lote):</strong> O usuário não interage com o programa em execução. Os programas são processados em fila (sequencialmente), otimizando a máquina, mas zerando a interatividade.</li>
+                <li><strong>Multiprogramação:</strong> Mantém vários processos na memória ao mesmo tempo. Se o processo "A" pausa para ler o disco (I/O), o SO joga o processo "B" na CPU. Maximiza o uso do hardware.</li>
+                <li><strong>Time-Sharing (Tempo Compartilhado):</strong> É uma evolução da multiprogramação focada na interatividade. A CPU é dividida em pequenas "fatias de tempo" (<i>time slices</i>). Alterna tão rápido entre os processos que cada usuário acha que a máquina é exclusiva dele.</li>
+                <li><strong>Multiprocessamento:</strong> Uso de múltiplas CPUs. Pode ser <strong>Assimétrico</strong> (uma CPU mestre dita as regras e as outras obedecem) ou <strong>Simétrico / SMP</strong> (todas as CPUs são iguais e compartilham a mesma memória).</li>
+                <li><strong>Sistemas Distribuídos:</strong> Várias máquinas (nós) independentes conectadas em rede, cada uma com sua memória local, que parecem um sistema único para o usuário.</li>
+                <li><strong>Sistemas de Tempo Real (Real-Time):</strong> A exatidão temporal é crítica. Subdividido em <strong>Hard</strong> (se perder o prazo/deadline, ocorre uma falha catastrófica - ex: robótica médica, aviões) e <strong>Soft</strong> (se perder o prazo há perda de qualidade, mas não é fatal - ex: streaming de vídeo). O Windows padrão NÃO é de tempo real.</li>
+            </ul>
         </div>
 
         <div class="card">
-            <h3>3. Explique a diferença entre Multiprogramação e Time-Sharing (Tempo Compartilhado).</h3>
-            <p>A <strong>Multiprogramação</strong> permite que diversos processos sejam mantidos na memória simultaneamente; quando um processo aguarda uma operação de I/O, a CPU é alocada para outro processo, maximizando seu uso[cite: 4108, 4132]. Já o <strong>Time-Sharing</strong> é uma evolução lógica voltada à interatividade: o processador é alocado por uma fatia de tempo (<i>time slice</i>) para cada usuário/programa em modo circular, dando a ilusão de que a máquina é dedicada a cada usuário simultaneamente[cite: 3575, 3577].</p>
+            <h3>3. Gestão de Processos e Context Switch <span class="cite">[cite: 4492, 4557, 4688, 4708]</span></h3>
+            <p>Um processo é um "programa em execução". O kernel gerencia os processos utilizando o <strong>PCB (Process Control Block ou Bloco de Controle de Processo)</strong>, que é uma estrutura de dados que guarda o "estado atual" do processo (onde o Program Counter parou, quais registradores estavam em uso, limites de memória, etc.).</p>
+            <p><strong>Mudança de Contexto (Context Switch):</strong> Quando a CPU precisa sair do Processo A e ir para o Processo B, ela precisa <em>salvar</em> o estado do Processo A no PCB dele, e <em>carregar</em> o estado do Processo B do PCB dele. Isso é custoso e gera latência (Dispatch Latency).</p>
+            <p><strong>Preempção:</strong> É o ato do SO interromper forçadamente um processo que está rodando na CPU para dar lugar a outro (seja porque o tempo dele acabou, ou chegou alguém mais prioritário).</p>
         </div>
 
         <div class="card">
-            <h3>4. O que é o algoritmo Round Robin (RR) e o que é o Quantum?</h3>
-            <p>O Round Robin é um algoritmo de escalonamento preemptivo ideal para sistemas de tempo compartilhado. Ele atribui a cada processo uma pequena e igual unidade de tempo da CPU, chamada <span class="highlight">Quantum</span>[cite: 5189, 5190]. Quando o quantum de um processo expira, o sistema operacional o interrompe (preempção) e o coloca no final da fila de processos prontos, passando a CPU para o próximo processo da fila[cite: 5191].</p>
-        </div>
+            <h3>4. Escalonamento da CPU: Algoritmos <span class="cite">[cite: 4775, 4839, 4907, 4975, 5190, 5421]</span></h3>
+            <p>O Escalonador de Curto Prazo (Short-Term Scheduler) escolhe qual processo da "Fila de Prontos" vai para a CPU. A execução de um processo é um ciclo contínuo de <strong>CPU Burst</strong> (uso do processador) e <strong>I/O Burst</strong> (espera por periféricos). Os algoritmos decidem a ordem:</p>
+            
+            <h4>• FCFS (First-Come, First-Served)</h4>
+            <p>Não preemptivo. O primeiro que chega é o primeiro a usar a CPU até terminar. <br><strong>Problema:</strong> Se um processo enorme chegar primeiro, todos os menores vão ficar travados atrás dele (Efeito Comboio), gerando alto tempo de espera médio.</p>
 
-        <div class="card">
-            <h3>5. O que é Starvation (Inanição) e qual técnica resolve esse problema?</h3>
-            <p>Starvation é um fenômeno onde um processo aguarda indefinidamente pela alocação da CPU porque outros processos (geralmente de maior prioridade) continuam chegando e assumindo a execução[cite: 4542, 4545]. A solução padrão em SOs é o <strong>Aging (Envelhecimento)</strong>, técnica que aumenta gradualmente a prioridade dos processos que estão aguardando há muito tempo na fila de prontos[cite: 4976].</p>
-        </div>
+            <h4>• SJF (Shortest Job First)</h4>
+            <p>Não preemptivo. Pega o processo com o <strong>menor</strong> tempo de CPU (CPU Burst) da fila e o executa. <br><strong>Vantagem:</strong> É matematicamente o algoritmo que gera o <em>menor tempo médio de espera</em>.<br><strong>Problema:</strong> Na prática, o SO não tem uma bola de cristal para prever o exato tempo futuro que um processo vai gastar na CPU.</p>
 
-        <div class="card">
-            <h3>6. Diferencie o funcionamento dos pipes ( | ) e dos redirecionadores ( > e >> ) no Bash.</h3>
-            <p>Os <strong>redirecionadores</strong> manipulam a entrada e saída para arquivos. O <code>></code> redireciona a saída de um comando sobrescrevendo o arquivo de destino, enquanto o <code>>></code> anexa a saída ao final do arquivo[cite: 846, 847, 849]. O <strong>pipe ( | )</strong> cria um encadeamento entre comandos: ele pega a saída (standard output) do comando executado à esquerda e a injeta como entrada (standard input) para o comando à direita[cite: 1830, 5533, 5535].</p>
+            <h4>• SRT (Shortest Remaining Time)</h4>
+            <p>É a versão <strong>preemptiva</strong> do SJF. Se um processo novo chegar com um tempo de CPU menor do que o tempo <em>restante</em> do processo atual, o atual sofre preempção e perde a CPU para o novato.</p>
+
+            <h4>• Escalonamento por Prioridade & Starvation</h4>
+            <p>Preemptivo ou não. Cada processo ganha um número de prioridade (geralmente, número menor = prioridade maior). A CPU vai para a maior prioridade. <br><strong>O grande problema:</strong> <em>Starvation (Inanição)</em>. Processos de baixa prioridade podem ficar travados para sempre se processos de alta prioridade não pararem de chegar. <br><strong>A solução:</strong> <em>Aging (Envelhecimento)</em>, que aumenta gradualmente a prioridade dos processos que estão aguardando há muito tempo.</p>
+
+            <h4>• Round Robin (RR)</h4>
+            <p>Preemptivo. Projetado para Time-Sharing. Cada processo ganha uma fatia de tempo exata chamada <strong>Quantum</strong> (ex: 20ms). Se o processo não terminar dentro do Quantum, ele sofre preempção e vai pro fim da fila. É o mais justo para interatividade. Se o Quantum for muito grande, vira um FCFS. Se for muito pequeno, a máquina perde muito tempo apenas fazendo mudança de contexto.</p>
+            
+            <h4>• Múltiplas Filas (Multilevel Queues)</h4>
+            <p>Divide os processos em várias filas com prioridades distintas (Ex: Fila Foreground usa Round Robin; Fila Background usa FCFS). Em Múltiplas Filas com <em>Feedback</em>, os processos podem transitar entre as filas de acordo com seu comportamento e consumo de CPU.</p>
         </div>
     </div>
 
-    <div id="resumo" class="tab-content">
-        <h2>Resumo Rápido (Cheat Sheet)</h2>
+    <div id="comandos" class="tab-content">
+        <h2>Comandos de Laboratório Linux/Bash</h2>
+        <p>Foco na sintaxe prática e explicação simples, conforme visto nos guias práticos. <span class="cite">[cite: 785, 792, 845, 898, 925, 946, 1055, 1067, 1092, 1146, 1197, 1251, 1258, 1311, 1522, 1585, 1635, 1649, 1658, 1681, 1705, 1726, 1732, 1737, 1743, 2234, 2252, 2461, 2471, 2494, 2660, 2700, 2755, 2797, 2873, 2883]</span></p>
+
+        <div class="card">
+            <h3>Navegação e Sistema de Arquivos</h3>
+            <div class="cmd-box">pwd</div>
+            <p class="cmd-desc"><strong>Print Working Directory:</strong> Mostra o caminho absoluto do diretório onde você está no momento.</p>
+            
+            <div class="cmd-box">cd [diretório]</div>
+            <p class="cmd-desc"><strong>Change Directory:</strong> Muda a pasta atual. <code>cd ..</code> sobe um nível. <code>cd /</code> vai para o diretório raiz. Digitar só <code>cd</code> volta para o diretório Home (~) do usuário.</p>
+            
+            <div class="cmd-box">ls [opções]</div>
+            <p class="cmd-desc"><strong>List:</strong> Lista arquivos e diretórios. <br><code>ls -l</code>: lista longa (mostra permissões, dono, tamanho, data).<br><code>ls -a</code>: mostra arquivos ocultos (que começam com ponto).<br><code>ls -lh</code>: mostra o tamanho em formato legível para humanos (MB, GB).</p>
+
+            <div class="cmd-box">mkdir [nome] / rmdir [nome]</div>
+            <p class="cmd-desc"><strong>Make / Remove Directory:</strong> Cria ou remove pastas. O <code>rmdir</code> só apaga a pasta se ela estiver completamente vazia.</p>
+
+            <div class="cmd-box">cp [origem] [destino]</div>
+            <p class="cmd-desc"><strong>Copy:</strong> Copia arquivos. Para copiar pastas e todo seu conteúdo, use <code>cp -r</code> (recursivo).</p>
+
+            <div class="cmd-box">mv [origem] [destino]</div>
+            <p class="cmd-desc"><strong>Move:</strong> Move arquivos de um lugar para outro, <strong>OU</strong> renomeia um arquivo, dependendo do destino informado.</p>
+
+            <div class="cmd-box">rm [arquivo]</div>
+            <p class="cmd-desc"><strong>Remove:</strong> Apaga arquivos. <br><code>rm -r</code>: apaga pastas recursivamente.<br><code>rm -f</code>: força a deleção sem perguntar (cuidado com <code>rm -rf</code>).</p>
+
+            <div class="cmd-box">touch [arquivo]</div>
+            <p class="cmd-desc">Cria um arquivo vazio. Se o arquivo já existir, ele apenas atualiza a data e hora de acesso/modificação do arquivo.</p>
+        </div>
+
+        <div class="card">
+            <h3>Manipulação e Visualização de Texto</h3>
+            <div class="cmd-box">cat [arquivo]</div>
+            <p class="cmd-desc"><strong>Concatenate:</strong> Imprime todo o conteúdo de um arquivo de texto no terminal de uma só vez.</p>
+
+            <div class="cmd-box">more / less</div>
+            <p class="cmd-desc">Mostra o conteúdo de um arquivo grande página por página. O <code>less</code> é mais flexível, permitindo navegar para cima e para baixo.</p>
+
+            <div class="cmd-box">grep [padrão] [arquivo]</div>
+            <p class="cmd-desc">Busca por palavras ou padrões de texto dentro de arquivos. <br><code>grep -i</code>: ignora diferença entre maiúsculas e minúsculas.<br><code>grep -v</code>: inverte a busca (mostra linhas que NÃO contêm a palavra).</p>
+        </div>
+
+        <div class="card">
+            <h3>Redirecionamentos e Pipes</h3>
+            <div class="cmd-box">> e >></div>
+            <p class="cmd-desc"><code>></code> (Sobrescreve): Pega a saída de um comando e salva em um arquivo, apagando o que tinha lá.<br><code>>></code> (Adiciona): Salva a saída no final do arquivo, preservando o que já existia (append).</p>
+
+            <div class="cmd-box">| (Pipe)</div>
+            <p class="cmd-desc">Pega a saída do comando da esquerda e joga diretamente na entrada do comando da direita (Ex: <code>ls -l | more</code>).</p>
+        </div>
+
+        <div class="card">
+            <h3>Gerenciamento de Processos</h3>
+            <div class="cmd-box">Comando &</div>
+            <p class="cmd-desc">Colocar um <code>&</code> no final de qualquer comando faz com que ele execute em <strong>Background</strong> (segundo plano), liberando o terminal para você continuar usando.</p>
+
+            <div class="cmd-box">Ctrl+Z / bg / fg / jobs</div>
+            <p class="cmd-desc"><code>Ctrl+Z</code>: Suspende/pausa o processo atual.<br><code>jobs</code>: Lista os processos rodando no background.<br><code>bg %1</code>: Retoma a execução do processo 1 em background.<br><code>fg %1</code>: Traz o processo 1 de volta para o primeiro plano (Foreground).</p>
+
+            <div class="cmd-box">ps [opções]</div>
+            <p class="cmd-desc"><strong>Process Status:</strong> Mostra os processos atuais. <br><code>ps -e</code> (ou -A): mostra processos de todos os usuários.<br><code>ps -f</code>: saída completa (full). Ex: <code>ps -ef</code> é muito comum.</p>
+
+            <div class="cmd-box">top / htop</div>
+            <p class="cmd-desc">Monitores de processos dinâmicos. Ficam atualizando a tela em tempo real, mostrando quem consome mais CPU e RAM. O <code>htop</code> é a versão colorida e melhorada.</p>
+
+            <div class="cmd-box">kill / killall</div>
+            <p class="cmd-desc">Envia sinais (geralmente para finalizar processos).<br><code>kill PID</code>: encerra um processo suavemente (SIGTERM -15).<br><code>kill -9 PID</code>: mata forçadamente, sem chance do processo salvar dados (SIGKILL).<br><code>killall [nome]</code>: mata todos os processos que tenham o mesmo nome.</p>
+
+            <div class="cmd-box">nice / renice</div>
+            <p class="cmd-desc">Altera a prioridade de um processo. O valor de prioridade (NI) vai de -20 (prioridade altíssima) a +19 (prioridade baixíssima). O padrão é 0. <br><code>nice</code>: define a prioridade ao iniciar.<br><code>renice</code>: altera a prioridade de um processo já rodando.</p>
+            
+            <div class="cmd-box">nohup</div>
+            <p class="cmd-desc"><strong>No Hang Up:</strong> Garante que o processo continue rodando no background mesmo que você feche a janela do terminal ou faça logout.</p>
+        </div>
         
         <div class="card">
-            <h3>Comandos Essenciais de Terminal</h3>
-            <ul>
-                <li><code>pwd</code>: Print Working Directory (Mostra onde você está)[cite: 1055].</li>
-                <li><code>cd /caminho</code>: Change Directory (Navega entre pastas). <code>cd ..</code> sobe um nível[cite: 1060, 1064].</li>
-                <li><code>ls -la</code>: Lista arquivos, incluindo os ocultos e com permissões[cite: 951].</li>
-                <li><code>mkdir</code> / <code>rmdir</code>: Cria / Remove diretório (rmdir só apaga se estiver vazio)[cite: 898, 925].</li>
-                <li><code>rm -rf</code>: Remove diretórios não vazios recursivamente e sem pedir confirmação[cite: 1183, 1189].</li>
-                <li><code>cp -r</code>: Copia diretórios de forma recursiva[cite: 1202].</li>
-                <li><code>mv</code>: Move OU renomeia arquivos/diretórios[cite: 1093, 1095].</li>
-                <li><code>cat</code>: Concatena e imprime o conteúdo de um arquivo na tela[cite: 792].</li>
-                <li><code>grep</code>: Busca por strings/padrões em arquivos (ex: <code>grep -i "texto"</code> para ignorar maiúsculas)[cite: 1311, 1316].</li>
-                <li><code>chmod</code>: Altera permissões. <code>chown</code>: Altera o dono do arquivo.</li>
-            </ul>
-        </div>
-
-        <div class="card">
-            <h3>Gestão de Processos</h3>
-            <ul>
-                <li><strong>Processo:</strong> Programa em execução[cite: 2046]. Tem um PID (Identificador) único[cite: 2050].</li>
-                <li><strong>Foreground vs Background:</strong> Foreground toma o terminal[cite: 2074]. Background (use o <code>&</code> no final do comando) roda em paralelo[cite: 2086, 2091].</li>
-                <li><strong>Suspensão:</strong> <code>Ctrl + Z</code> pausa um processo e o joga pro background[cite: 2101]. Use <code>bg</code> para retomá-lo atrás das cortinas, ou <code>fg</code> para trazê-lo de volta[cite: 2108, 2112].</li>
-                <li><strong>Mata Processo:</strong> <code>kill PID</code> encerra[cite: 2170]. <code>kill -9 PID</code> força a morte imediata (SIGKILL)[cite: 2500, 2560].</li>
-            </ul>
-        </div>
-
-        <div class="card">
-            <h3>Algoritmos de Escalonamento (O que Cai!)</h3>
-            <ul>
-                <li><span class="highlight">FCFS (First-Come, First-Served):</span> Primeiro a chegar é o primeiro a usar a CPU. Não preemptivo. Pode gerar alto tempo de espera[cite: 4775, 4778].</li>
-                <li><span class="highlight">SJF (Shortest Job First):</span> Executa o processo mais curto. É ótimo para o tempo médio, mas não dá pra saber o tempo futuro de um processo na vida real[cite: 4837, 4845].</li>
-                <li><span class="highlight">SRT (Shortest Remaining Time):</span> Versão preemptiva do SJF[cite: 4907].</li>
-                <li><span class="highlight">RR (Round Robin):</span> Usa fatias de tempo (quantum). Se o processo não acabar, sofre preempção. Justo e bom para interatividade[cite: 5189, 5190].</li>
-                <li><span class="highlight">Prioridade:</span> Processos com maior prioridade passam na frente (números menores geralmente indicam prioridade maior)[cite: 4971, 4992].</li>
-            </ul>
-        </div>
-    </div>
-
-    <div id="conteudo" class="tab-content">
-        <h2>Conteúdo Aprofundado</h2>
-        
-        <div class="card">
-            <h3>1. A Filosofia GNU e Linux</h3>
-            <p>O Projeto GNU foi fundado por Richard Stallman em 1984 com o objetivo de criar um sistema operacional 100% livre (GNU's Not Unix)[cite: 36, 37, 39]. A liberdade de software é garantida pela licença GPL e abrange as quatro liberdades: executar, estudar, redistribuir e modificar/aperfeiçoar o código[cite: 46, 54, 55, 56, 57, 58].</p>
-            <p>O Linux, criado por Linus Torvalds em 1991, é apenas o <strong>Kernel</strong> (núcleo) do sistema[cite: 132, 216]. Quando juntamos o kernel Linux com os utilitários GNU, formamos o sistema operacional completo que usamos hoje[cite: 224]. O Tux (pinguim) é a mascote oficial[cite: 171].</p>
-        </div>
-
-        <div class="card">
-            <h3>2. Estrutura do SO e Gerência de Processos</h3>
-            <p>O <strong>PCB (Process Control Block)</strong> é uma estrutura que guarda o contexto de um processo (seu PID, registradores, program counter, estado atual) para que a CPU saiba exatamente de onde retomar o processamento após uma preempção[cite: 4491, 4492, 4510].</p>
-            <p><strong>Ciclo de vida do processo:</strong></p>
-            <ul>
-                <li><strong>New:</strong> Sendo criado[cite: 2354].</li>
-                <li><strong>Ready (Pronto):</strong> Aguardando a CPU na fila do escalonador[cite: 2363].</li>
-                <li><strong>Running (Executando):</strong> De posse do processador[cite: 2366].</li>
-                <li><strong>Waiting (Bloqueado):</strong> Pausado aguardando um recurso ou um I/O[cite: 2374].</li>
-                <li><strong>Terminated:</strong> Concluído[cite: 2355].</li>
-            </ul>
-        </div>
-
-        <div class="card">
-            <h3>3. A Profundidade do Escalonamento</h3>
-            <p>O escalonador de curto prazo atua em milissegundos selecionando quem ganha a CPU[cite: 4581, 4582]. Ele avalia o ciclo do processo que alterna entre uso intenso da CPU (CPU Bound) e espera por entrada/saída (I/O Bound)[cite: 4631, 4634].</p>
-            <p>O sistema conta com o processo <strong>idle</strong> para consumir ciclos de CPU quando todas as outras tarefas estão bloqueadas. Ele roda com a menor prioridade possível para nunca atrapalhar as tarefas úteis e evita a ociosidade total abrupta da máquina[cite: 5353, 5354, 5355].</p>
+            <h3>Outros Úteis</h3>
+            <p><code>df -h</code> (Vê espaço em disco em MB/GB), <code>uptime</code> (Há quanto tempo o PC está ligado e a carga média), <code>whoami</code> (Mostra seu usuário logado), <code>clear</code> (Limpa a tela do terminal).</p>
         </div>
     </div>
 
     <div id="flashcards" class="tab-content">
-        <h2>Flashcards Interativos (Clique para virar)</h2>
-        <p style="text-align:center; color: var(--text-muted); margin-bottom: 2rem;">Revise os conceitos de memorização rápida.</p>
+        <h2>Flashcards de Fixação (Toque para Virar)</h2>
+        <p style="text-align:center; color: var(--text-muted); margin-bottom: 2rem;">As questões clássicas de prova baseadas nos PDFs.</p>
 
         <div class="flashcard-grid">
             <div class="flashcard" onclick="this.classList.toggle('flipped')">
                 <div class="flashcard-inner">
                     <div class="flashcard-front">
-                        <h3>O que o comando 'chmod' faz?</h3>
+                        O que é a "Inversão de Prioridade" e como a "Inanição (Starvation)" é resolvida?
                     </div>
                     <div class="flashcard-back">
-                        <p>Altera as permissões de acesso (leitura, escrita, execução) de arquivos e diretórios.</p>
+                        <p>Inversão ocorre quando um processo de baixa prioridade trava um de alta. A Inanição ocorre no escalonamento por prioridade e é resolvida pelo <b>Aging (Envelhecimento)</b>: aumentar gradualmente a prioridade dos processos que aguardam há muito tempo.</p>
                     </div>
                 </div>
             </div>
@@ -343,10 +407,10 @@
             <div class="flashcard" onclick="this.classList.toggle('flipped')">
                 <div class="flashcard-inner">
                     <div class="flashcard-front">
-                        <h3>O que é Preempção?</h3>
+                        Qual a diferença entre os escalonadores SJF e SRT?
                     </div>
                     <div class="flashcard-back">
-                        <p>É a capacidade do Sistema Operacional (Escalonador) de interromper e retirar a CPU de um processo à força, antes dele terminar[cite: 4558].</p>
+                        <p>Ambos escolhem o processo mais curto. O <b>SJF</b> é Não-Preemptivo (deixa terminar). O <b>SRT</b> (Shortest Remaining Time) é Preemptivo: se chegar um menor, ele rouba a CPU do atual.</p>
                     </div>
                 </div>
             </div>
@@ -354,10 +418,10 @@
             <div class="flashcard" onclick="this.classList.toggle('flipped')">
                 <div class="flashcard-inner">
                     <div class="flashcard-front">
-                        <h3>Diferencie Caminho Absoluto e Relativo.</h3>
+                        Explique a função do Quantum no algoritmo Round Robin.
                     </div>
                     <div class="flashcard-back">
-                        <p>Absoluto: Parte sempre do diretório raiz ('/'). Ex: /etc/hosts[cite: 855, 856].<br><br>Relativo: Parte do diretório em que você se encontra. Ex: marcio/arq.txt[cite: 858, 859].</p>
+                        <p>Quantum (ou fatia de tempo) é o limite máximo de tempo contínuo que um processo pode usar a CPU por vez. Quando o quantum acaba, o processo sofre preempção e vai pro final da fila.</p>
                     </div>
                 </div>
             </div>
@@ -365,10 +429,10 @@
             <div class="flashcard" onclick="this.classList.toggle('flipped')">
                 <div class="flashcard-inner">
                     <div class="flashcard-front">
-                        <h3>Qual a finalidade do comando 'nohup'?</h3>
+                        O que acontece se o SO não tem NENHUM processo pronto para rodar?
                     </div>
                     <div class="flashcard-back">
-                        <p>Manter um processo rodando no sistema mesmo após o usuário fazer logout ou fechar o shell[cite: 2873, 2874].</p>
+                        <p>O Escalonador aciona o processo <b>Idle</b> (Processo Ocioso). Ele tem a menor prioridade possível e roda apenas para evitar que a CPU gaste tempo travando/reiniciando ou fazendo busy wait inútil.</p>
                     </div>
                 </div>
             </div>
@@ -376,10 +440,10 @@
             <div class="flashcard" onclick="this.classList.toggle('flipped')">
                 <div class="flashcard-inner">
                     <div class="flashcard-front">
-                        <h3>O que faz o algoritmo SJF?</h3>
+                        Como jogar um processo para Background e Background pausado no Linux?
                     </div>
                     <div class="flashcard-back">
-                        <p>Shortest Job First. Ele aloca a CPU para o processo que necessita do menor tempo de execução[cite: 4837, 4840]. É ótimo para a média de tempo de espera[cite: 4845].</p>
+                        <p>Use <b>&</b> no final do comando para iniciar direto em background. Se já estiver rodando, aperte <b>Ctrl+Z</b> para suspender e depois digite <b>bg</b> para ele rodar escondido.</p>
                     </div>
                 </div>
             </div>
@@ -387,10 +451,10 @@
             <div class="flashcard" onclick="this.classList.toggle('flipped')">
                 <div class="flashcard-inner">
                     <div class="flashcard-front">
-                        <h3>O que é o Spooling?</h3>
+                        Para que servem os comandos nice e kill -9?
                     </div>
                     <div class="flashcard-back">
-                        <p>Técnica onde as operações de I/O são transferidas para buffers (como discos) para que a CPU continue processando outras tarefas simultaneamente, sem ociosidade[cite: 4070, 4071].</p>
+                        <p><b>nice</b> ajusta a prioridade do processo (valores negativos = maior prioridade). <b>kill -9</b> manda o sinal SIGKILL, que força a morte imediata do processo, sem chance de salvar nada.</p>
                     </div>
                 </div>
             </div>
@@ -398,39 +462,39 @@
     </div>
 
     <div id="quiz" class="tab-content">
-        <h2>Quiz Prático</h2>
+        <h2>Quiz: Teste de Conhecimento</h2>
         
         <div id="quiz-container">
             <div class="quiz-question">
-                <p><strong>1. Se um processo estiver executando normalmente, mas de repente precisa carregar um arquivo grande do disco rígido, para qual estado o escalonador o moverá?</strong></p>
-                <label class="quiz-option"><input type="radio" name="q1" value="wrong"> Pronto (Ready)</label>
-                <label class="quiz-option"><input type="radio" name="q1" value="wrong"> Encerrado (Terminated)</label>
-                <label class="quiz-option"><input type="radio" name="q1" value="correct"> Bloqueado / Espera (Waiting)</label>
-                <label class="quiz-option"><input type="radio" name="q1" value="wrong"> Novo (New)</label>
+                <p><strong>1. Em escalonamento de CPU, qual é o conceito principal que diferencia a "Multiprogramação" de antigamente do "Time-Sharing" atual?</strong></p>
+                <label class="quiz-option"><input type="radio" name="q1" value="wrong"> A multiprogramação usa a interface gráfica (GUI), e o Time-Sharing usa o Bash.</label>
+                <label class="quiz-option"><input type="radio" name="q1" value="wrong"> Ambos são estritamente em Lote (Batch).</label>
+                <label class="quiz-option"><input type="radio" name="q1" value="correct"> O Time-Sharing foca na interatividade do usuário, dividindo a CPU em pequenas fatias de tempo (Time Slices) de forma circular.</label>
+                <label class="quiz-option"><input type="radio" name="q1" value="wrong"> A Multiprogramação exige múltiplas CPUs (Multicore), enquanto o Time Sharing usa apenas uma.</label>
             </div>
 
             <div class="quiz-question">
-                <p><strong>2. Qual comando é capaz de jogar um processo que está pausado/suspenso para rodar no plano de fundo (Background)?</strong></p>
-                <label class="quiz-option"><input type="radio" name="q2" value="wrong"> fg</label>
-                <label class="quiz-option"><input type="radio" name="q2" value="correct"> bg</label>
-                <label class="quiz-option"><input type="radio" name="q2" value="wrong"> jobs</label>
-                <label class="quiz-option"><input type="radio" name="q2" value="wrong"> kill</label>
+                <p><strong>2. Qual alternativa reflete CORRETAMENTE a relação de "Preempção" dos algoritmos?</strong></p>
+                <label class="quiz-option"><input type="radio" name="q2" value="wrong"> FCFS é preemptivo e SJF é preemptivo.</label>
+                <label class="quiz-option"><input type="radio" name="q2" value="correct"> FCFS é Não-Preemptivo; Round Robin é sempre Preemptivo.</label>
+                <label class="quiz-option"><input type="radio" name="q2" value="wrong"> SJF é sempre Preemptivo; SRT é Não-Preemptivo.</label>
+                <label class="quiz-option"><input type="radio" name="q2" value="wrong"> Escalonamento por Prioridade nunca sofre preempção.</label>
             </div>
 
             <div class="quiz-question">
-                <p><strong>3. O comando utilizado para concatenar a saída de um programa "A" garantindo que ela sirva de entrada para o programa "B" é:</strong></p>
-                <label class="quiz-option"><input type="radio" name="q3" value="wrong"> O operador >> </label>
-                <label class="quiz-option"><input type="radio" name="q3" value="wrong"> O operador > </label>
-                <label class="quiz-option"><input type="radio" name="q3" value="correct"> O pipe ( | )</label>
-                <label class="quiz-option"><input type="radio" name="q3" value="wrong"> O e-comercial ( & )</label>
+                <p><strong>3. Se o administrador do sistema quiser garantir que o log de um processo seja anexado ao final de um arquivo já existente (sem apagar os dados antigos), qual operador de Bash ele deve usar?</strong></p>
+                <label class="quiz-option"><input type="radio" name="q3" value="wrong"> ></label>
+                <label class="quiz-option"><input type="radio" name="q3" value="correct"> >></label>
+                <label class="quiz-option"><input type="radio" name="q3" value="wrong"> |</label>
+                <label class="quiz-option"><input type="radio" name="q3" value="wrong"> &</label>
             </div>
 
             <div class="quiz-question">
-                <p><strong>4. Qual é a utilidade do comando "grep"?</strong></p>
-                <label class="quiz-option"><input type="radio" name="q4" value="correct"> Realizar a busca de padrões/textos dentro de arquivos.</label>
-                <label class="quiz-option"><input type="radio" name="q4" value="wrong"> Alterar permissões recursivas de uma pasta.</label>
-                <label class="quiz-option"><input type="radio" name="q4" value="wrong"> Matar um processo usando expressão regular.</label>
-                <label class="quiz-option"><input type="radio" name="q4" value="wrong"> Mudar o dono (owner) de um arquivo de sistema.</label>
+                <p><strong>4. Analise as afirmativas sobre comandos Linux e marque a CORRETA:</strong></p>
+                <label class="quiz-option"><input type="radio" name="q4" value="wrong"> "pwd" troca o usuário para root.</label>
+                <label class="quiz-option"><input type="radio" name="q4" value="correct"> "mv" pode ser utilizado tanto para mover arquivos de diretório quanto para renomeá-los.</label>
+                <label class="quiz-option"><input type="radio" name="q4" value="wrong"> "grep" remove diretórios não vazios.</label>
+                <label class="quiz-option"><input type="radio" name="q4" value="wrong"> "cat" é utilizado exclusivamente para visualizar o status atual da memória RAM.</label>
             </div>
 
             <button class="quiz-btn" onclick="checkQuiz()">Corrigir Quiz</button>
@@ -439,33 +503,26 @@
 
     <script>
         function openTab(evt, tabName) {
-            // Esconde todas as abas
             var tabContents = document.getElementsByClassName("tab-content");
             for (var i = 0; i < tabContents.length; i++) {
                 tabContents[i].classList.remove("active");
             }
-
-            // Desmarca todos os botões
             var tabBtns = document.getElementsByClassName("tab-btn");
             for (var i = 0; i < tabBtns.length; i++) {
                 tabBtns[i].classList.remove("active");
             }
-
-            // Mostra a aba clicada e marca o botão
             document.getElementById(tabName).classList.add("active");
             evt.currentTarget.classList.add("active");
-            window.scrollTo(0, 0); // Sobe pro topo ao mudar de aba
+            window.scrollTo(0, 0);
         }
 
         function checkQuiz() {
             var options = document.getElementsByClassName('quiz-option');
             
-            // Reseta estilos
             for(let i=0; i<options.length; i++){
                 options[i].classList.remove('correct-answer', 'wrong-answer');
             }
 
-            // Checa respostas
             for(let i=0; i<options.length; i++){
                 let input = options[i].querySelector('input');
                 if(input.checked) {
@@ -475,7 +532,6 @@
                         options[i].classList.add('wrong-answer');
                     }
                 }
-                // Mostra as certas pra correção
                 if(input.value === 'correct') {
                     options[i].classList.add('correct-answer');
                 }
