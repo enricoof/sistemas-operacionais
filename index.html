@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App de Estudo: Sistemas Operacionais</title>
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --secondary: #10B981;
+            --bg-color: #F3F4F6;
+            --card-bg: #FFFFFF;
+            --text-main: #1F2937;
+            --text-muted: #6B7280;
+            --danger: #EF4444;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .tabs {
+            display: flex;
+            overflow-x: auto;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .tab-btn {
+            flex: 1;
+            min-width: 120px;
+            padding: 1rem;
+            border: none;
+            background: none;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 1.5rem 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Cartões de Conteúdo */
+        .card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--primary);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: var(--primary);
+        }
+
+        .highlight {
+            background-color: #FEF3C7;
+            padding: 0.1rem 0.3rem;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        /* Flashcards */
+        .flashcard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .flashcard {
+            background-color: transparent;
+            width: 100%;
+            height: 200px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            box-sizing: border-box;
+            border-radius: 8px;
+            background-color: white;
+            border: 2px solid var(--primary);
+        }
+
+        .flashcard-back {
+            background-color: var(--primary);
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        /* Quiz */
+        .quiz-question {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .quiz-option {
+            display: block;
+            padding: 0.8rem;
+            margin: 0.5rem 0;
+            border: 1px solid #D1D5DB;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .quiz-option:hover {
+            background: #F9FAFB;
+        }
+
+        .quiz-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+        }
+
+        .correct-answer {
+            background-color: #D1FAE5 !important;
+            border-color: var(--secondary) !important;
+            color: #065F46;
+        }
+
+        .wrong-answer {
+            background-color: #FEE2E2 !important;
+            border-color: var(--danger) !important;
+            color: #991B1B;
+        }
+
+        code {
+            background: #E5E7EB;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            color: #B91C1C;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>📚 App de Revisão: Sistemas Operacionais</h1>
+        <p>Foco na Prova - Linux, Bash e Gestão de Processos</p>
+    </header>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="openTab(event, 'prova')">📝 Prova (Foco)</button>
+        <button class="tab-btn" onclick="openTab(event, 'resumo')">⚡ Resumo Rápido</button>
+        <button class="tab-btn" onclick="openTab(event, 'conteudo')">📖 Conteúdo Completo</button>
+        <button class="tab-btn" onclick="openTab(event, 'flashcards')">🗂️ Flashcards</button>
+        <button class="tab-btn" onclick="openTab(event, 'quiz')">🎯 Quiz</button>
+    </div>
+
+    <div id="prova" class="tab-content active">
+        <h2>Questões Quentes para a Prova</h2>
+        
+        <div class="card">
+            <h3>1. Qual a diferença entre Software Livre e Software Gratuito (Freeware)?</h3>
+            <p>O fato de ser gratuito não implica que o software seja livre[cite: 61]. O software gratuito (freeware) apenas não cobra pela licença de uso, mas seu código-fonte permanece fechado e indisponível[cite: 62]. Já o Software Livre garante ao usuário as liberdades fundamentais de executar, copiar, estudar, modificar e redistribuir o código-fonte, independentemente de ser comercializado ou não[cite: 48, 54, 55, 56].</p>
+        </div>
+
+        <div class="card">
+            <h3>2. Defina o que é um Sistema Operacional (SO) e suas principais funções.</h3>
+            <p>O Sistema Operacional é um programa que atua como intermediário entre o usuário e o hardware do computador[cite: 3794]. Ele opera em duas frentes principais: como um <span class="highlight">gerenciador de recursos</span> (alocando ordenadamente CPU, memória e I/O para os programas) e como uma <span class="highlight">máquina virtual ou estendida</span>, oferecendo abstrações que escondem os detalhes complexos do hardware e facilitam o uso[cite: 12, 14, 15].</p>
+        </div>
+
+        <div class="card">
+            <h3>3. Explique a diferença entre Multiprogramação e Time-Sharing (Tempo Compartilhado).</h3>
+            <p>A <strong>Multiprogramação</strong> permite que diversos processos sejam mantidos na memória simultaneamente; quando um processo aguarda uma operação de I/O, a CPU é alocada para outro processo, maximizando seu uso[cite: 4108, 4132]. Já o <strong>Time-Sharing</strong> é uma evolução lógica voltada à interatividade: o processador é alocado por uma fatia de tempo (<i>time slice</i>) para cada usuário/programa em modo circular, dando a ilusão de que a máquina é dedicada a cada usuário simultaneamente[cite: 3575, 3577].</p>
+        </div>
+
+        <div class="card">
+            <h3>4. O que é o algoritmo Round Robin (RR) e o que é o Quantum?</h3>
+            <p>O Round Robin é um algoritmo de escalonamento preemptivo ideal para sistemas de tempo compartilhado. Ele atribui a cada processo uma pequena e igual unidade de tempo da CPU, chamada <span class="highlight">Quantum</span>[cite: 5189, 5190]. Quando o quantum de um processo expira, o sistema operacional o interrompe (preempção) e o coloca no final da fila de processos prontos, passando a CPU para o próximo processo da fila[cite: 5191].</p>
+        </div>
+
+        <div class="card">
+            <h3>5. O que é Starvation (Inanição) e qual técnica resolve esse problema?</h3>
+            <p>Starvation é um fenômeno onde um processo aguarda indefinidamente pela alocação da CPU porque outros processos (geralmente de maior prioridade) continuam chegando e assumindo a execução[cite: 4542, 4545]. A solução padrão em SOs é o <strong>Aging (Envelhecimento)</strong>, técnica que aumenta gradualmente a prioridade dos processos que estão aguardando há muito tempo na fila de prontos[cite: 4976].</p>
+        </div>
+
+        <div class="card">
+            <h3>6. Diferencie o funcionamento dos pipes ( | ) e dos redirecionadores ( > e >> ) no Bash.</h3>
+            <p>Os <strong>redirecionadores</strong> manipulam a entrada e saída para arquivos. O <code>></code> redireciona a saída de um comando sobrescrevendo o arquivo de destino, enquanto o <code>>></code> anexa a saída ao final do arquivo[cite: 846, 847, 849]. O <strong>pipe ( | )</strong> cria um encadeamento entre comandos: ele pega a saída (standard output) do comando executado à esquerda e a injeta como entrada (standard input) para o comando à direita[cite: 1830, 5533, 5535].</p>
+        </div>
+    </div>
+
+    <div id="resumo" class="tab-content">
+        <h2>Resumo Rápido (Cheat Sheet)</h2>
+        
+        <div class="card">
+            <h3>Comandos Essenciais de Terminal</h3>
+            <ul>
+                <li><code>pwd</code>: Print Working Directory (Mostra onde você está)[cite: 1055].</li>
+                <li><code>cd /caminho</code>: Change Directory (Navega entre pastas). <code>cd ..</code> sobe um nível[cite: 1060, 1064].</li>
+                <li><code>ls -la</code>: Lista arquivos, incluindo os ocultos e com permissões[cite: 951].</li>
+                <li><code>mkdir</code> / <code>rmdir</code>: Cria / Remove diretório (rmdir só apaga se estiver vazio)[cite: 898, 925].</li>
+                <li><code>rm -rf</code>: Remove diretórios não vazios recursivamente e sem pedir confirmação[cite: 1183, 1189].</li>
+                <li><code>cp -r</code>: Copia diretórios de forma recursiva[cite: 1202].</li>
+                <li><code>mv</code>: Move OU renomeia arquivos/diretórios[cite: 1093, 1095].</li>
+                <li><code>cat</code>: Concatena e imprime o conteúdo de um arquivo na tela[cite: 792].</li>
+                <li><code>grep</code>: Busca por strings/padrões em arquivos (ex: <code>grep -i "texto"</code> para ignorar maiúsculas)[cite: 1311, 1316].</li>
+                <li><code>chmod</code>: Altera permissões. <code>chown</code>: Altera o dono do arquivo.</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h3>Gestão de Processos</h3>
+            <ul>
+                <li><strong>Processo:</strong> Programa em execução[cite: 2046]. Tem um PID (Identificador) único[cite: 2050].</li>
+                <li><strong>Foreground vs Background:</strong> Foreground toma o terminal[cite: 2074]. Background (use o <code>&</code> no final do comando) roda em paralelo[cite: 2086, 2091].</li>
+                <li><strong>Suspensão:</strong> <code>Ctrl + Z</code> pausa um processo e o joga pro background[cite: 2101]. Use <code>bg</code> para retomá-lo atrás das cortinas, ou <code>fg</code> para trazê-lo de volta[cite: 2108, 2112].</li>
+                <li><strong>Mata Processo:</strong> <code>kill PID</code> encerra[cite: 2170]. <code>kill -9 PID</code> força a morte imediata (SIGKILL)[cite: 2500, 2560].</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h3>Algoritmos de Escalonamento (O que Cai!)</h3>
+            <ul>
+                <li><span class="highlight">FCFS (First-Come, First-Served):</span> Primeiro a chegar é o primeiro a usar a CPU. Não preemptivo. Pode gerar alto tempo de espera[cite: 4775, 4778].</li>
+                <li><span class="highlight">SJF (Shortest Job First):</span> Executa o processo mais curto. É ótimo para o tempo médio, mas não dá pra saber o tempo futuro de um processo na vida real[cite: 4837, 4845].</li>
+                <li><span class="highlight">SRT (Shortest Remaining Time):</span> Versão preemptiva do SJF[cite: 4907].</li>
+                <li><span class="highlight">RR (Round Robin):</span> Usa fatias de tempo (quantum). Se o processo não acabar, sofre preempção. Justo e bom para interatividade[cite: 5189, 5190].</li>
+                <li><span class="highlight">Prioridade:</span> Processos com maior prioridade passam na frente (números menores geralmente indicam prioridade maior)[cite: 4971, 4992].</li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="conteudo" class="tab-content">
+        <h2>Conteúdo Aprofundado</h2>
+        
+        <div class="card">
+            <h3>1. A Filosofia GNU e Linux</h3>
+            <p>O Projeto GNU foi fundado por Richard Stallman em 1984 com o objetivo de criar um sistema operacional 100% livre (GNU's Not Unix)[cite: 36, 37, 39]. A liberdade de software é garantida pela licença GPL e abrange as quatro liberdades: executar, estudar, redistribuir e modificar/aperfeiçoar o código[cite: 46, 54, 55, 56, 57, 58].</p>
+            <p>O Linux, criado por Linus Torvalds em 1991, é apenas o <strong>Kernel</strong> (núcleo) do sistema[cite: 132, 216]. Quando juntamos o kernel Linux com os utilitários GNU, formamos o sistema operacional completo que usamos hoje[cite: 224]. O Tux (pinguim) é a mascote oficial[cite: 171].</p>
+        </div>
+
+        <div class="card">
+            <h3>2. Estrutura do SO e Gerência de Processos</h3>
+            <p>O <strong>PCB (Process Control Block)</strong> é uma estrutura que guarda o contexto de um processo (seu PID, registradores, program counter, estado atual) para que a CPU saiba exatamente de onde retomar o processamento após uma preempção[cite: 4491, 4492, 4510].</p>
+            <p><strong>Ciclo de vida do processo:</strong></p>
+            <ul>
+                <li><strong>New:</strong> Sendo criado[cite: 2354].</li>
+                <li><strong>Ready (Pronto):</strong> Aguardando a CPU na fila do escalonador[cite: 2363].</li>
+                <li><strong>Running (Executando):</strong> De posse do processador[cite: 2366].</li>
+                <li><strong>Waiting (Bloqueado):</strong> Pausado aguardando um recurso ou um I/O[cite: 2374].</li>
+                <li><strong>Terminated:</strong> Concluído[cite: 2355].</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h3>3. A Profundidade do Escalonamento</h3>
+            <p>O escalonador de curto prazo atua em milissegundos selecionando quem ganha a CPU[cite: 4581, 4582]. Ele avalia o ciclo do processo que alterna entre uso intenso da CPU (CPU Bound) e espera por entrada/saída (I/O Bound)[cite: 4631, 4634].</p>
+            <p>O sistema conta com o processo <strong>idle</strong> para consumir ciclos de CPU quando todas as outras tarefas estão bloqueadas. Ele roda com a menor prioridade possível para nunca atrapalhar as tarefas úteis e evita a ociosidade total abrupta da máquina[cite: 5353, 5354, 5355].</p>
+        </div>
+    </div>
+
+    <div id="flashcards" class="tab-content">
+        <h2>Flashcards Interativos (Clique para virar)</h2>
+        <p style="text-align:center; color: var(--text-muted); margin-bottom: 2rem;">Revise os conceitos de memorização rápida.</p>
+
+        <div class="flashcard-grid">
+            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                <div class="flashcard-inner">
+                    <div class="flashcard-front">
+                        <h3>O que o comando 'chmod' faz?</h3>
+                    </div>
+                    <div class="flashcard-back">
+                        <p>Altera as permissões de acesso (leitura, escrita, execução) de arquivos e diretórios.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                <div class="flashcard-inner">
+                    <div class="flashcard-front">
+                        <h3>O que é Preempção?</h3>
+                    </div>
+                    <div class="flashcard-back">
+                        <p>É a capacidade do Sistema Operacional (Escalonador) de interromper e retirar a CPU de um processo à força, antes dele terminar[cite: 4558].</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                <div class="flashcard-inner">
+                    <div class="flashcard-front">
+                        <h3>Diferencie Caminho Absoluto e Relativo.</h3>
+                    </div>
+                    <div class="flashcard-back">
+                        <p>Absoluto: Parte sempre do diretório raiz ('/'). Ex: /etc/hosts[cite: 855, 856].<br><br>Relativo: Parte do diretório em que você se encontra. Ex: marcio/arq.txt[cite: 858, 859].</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                <div class="flashcard-inner">
+                    <div class="flashcard-front">
+                        <h3>Qual a finalidade do comando 'nohup'?</h3>
+                    </div>
+                    <div class="flashcard-back">
+                        <p>Manter um processo rodando no sistema mesmo após o usuário fazer logout ou fechar o shell[cite: 2873, 2874].</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                <div class="flashcard-inner">
+                    <div class="flashcard-front">
+                        <h3>O que faz o algoritmo SJF?</h3>
+                    </div>
+                    <div class="flashcard-back">
+                        <p>Shortest Job First. Ele aloca a CPU para o processo que necessita do menor tempo de execução[cite: 4837, 4840]. É ótimo para a média de tempo de espera[cite: 4845].</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                <div class="flashcard-inner">
+                    <div class="flashcard-front">
+                        <h3>O que é o Spooling?</h3>
+                    </div>
+                    <div class="flashcard-back">
+                        <p>Técnica onde as operações de I/O são transferidas para buffers (como discos) para que a CPU continue processando outras tarefas simultaneamente, sem ociosidade[cite: 4070, 4071].</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="quiz" class="tab-content">
+        <h2>Quiz Prático</h2>
+        
+        <div id="quiz-container">
+            <div class="quiz-question">
+                <p><strong>1. Se um processo estiver executando normalmente, mas de repente precisa carregar um arquivo grande do disco rígido, para qual estado o escalonador o moverá?</strong></p>
+                <label class="quiz-option"><input type="radio" name="q1" value="wrong"> Pronto (Ready)</label>
+                <label class="quiz-option"><input type="radio" name="q1" value="wrong"> Encerrado (Terminated)</label>
+                <label class="quiz-option"><input type="radio" name="q1" value="correct"> Bloqueado / Espera (Waiting)</label>
+                <label class="quiz-option"><input type="radio" name="q1" value="wrong"> Novo (New)</label>
+            </div>
+
+            <div class="quiz-question">
+                <p><strong>2. Qual comando é capaz de jogar um processo que está pausado/suspenso para rodar no plano de fundo (Background)?</strong></p>
+                <label class="quiz-option"><input type="radio" name="q2" value="wrong"> fg</label>
+                <label class="quiz-option"><input type="radio" name="q2" value="correct"> bg</label>
+                <label class="quiz-option"><input type="radio" name="q2" value="wrong"> jobs</label>
+                <label class="quiz-option"><input type="radio" name="q2" value="wrong"> kill</label>
+            </div>
+
+            <div class="quiz-question">
+                <p><strong>3. O comando utilizado para concatenar a saída de um programa "A" garantindo que ela sirva de entrada para o programa "B" é:</strong></p>
+                <label class="quiz-option"><input type="radio" name="q3" value="wrong"> O operador >> </label>
+                <label class="quiz-option"><input type="radio" name="q3" value="wrong"> O operador > </label>
+                <label class="quiz-option"><input type="radio" name="q3" value="correct"> O pipe ( | )</label>
+                <label class="quiz-option"><input type="radio" name="q3" value="wrong"> O e-comercial ( & )</label>
+            </div>
+
+            <div class="quiz-question">
+                <p><strong>4. Qual é a utilidade do comando "grep"?</strong></p>
+                <label class="quiz-option"><input type="radio" name="q4" value="correct"> Realizar a busca de padrões/textos dentro de arquivos.</label>
+                <label class="quiz-option"><input type="radio" name="q4" value="wrong"> Alterar permissões recursivas de uma pasta.</label>
+                <label class="quiz-option"><input type="radio" name="q4" value="wrong"> Matar um processo usando expressão regular.</label>
+                <label class="quiz-option"><input type="radio" name="q4" value="wrong"> Mudar o dono (owner) de um arquivo de sistema.</label>
+            </div>
+
+            <button class="quiz-btn" onclick="checkQuiz()">Corrigir Quiz</button>
+        </div>
+    </div>
+
+    <script>
+        function openTab(evt, tabName) {
+            // Esconde todas as abas
+            var tabContents = document.getElementsByClassName("tab-content");
+            for (var i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove("active");
+            }
+
+            // Desmarca todos os botões
+            var tabBtns = document.getElementsByClassName("tab-btn");
+            for (var i = 0; i < tabBtns.length; i++) {
+                tabBtns[i].classList.remove("active");
+            }
+
+            // Mostra a aba clicada e marca o botão
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+            window.scrollTo(0, 0); // Sobe pro topo ao mudar de aba
+        }
+
+        function checkQuiz() {
+            var options = document.getElementsByClassName('quiz-option');
+            
+            // Reseta estilos
+            for(let i=0; i<options.length; i++){
+                options[i].classList.remove('correct-answer', 'wrong-answer');
+            }
+
+            // Checa respostas
+            for(let i=0; i<options.length; i++){
+                let input = options[i].querySelector('input');
+                if(input.checked) {
+                    if(input.value === 'correct') {
+                        options[i].classList.add('correct-answer');
+                    } else {
+                        options[i].classList.add('wrong-answer');
+                    }
+                }
+                // Mostra as certas pra correção
+                if(input.value === 'correct') {
+                    options[i].classList.add('correct-answer');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
