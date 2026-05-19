@@ -3,16 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App de Estudo: Sistemas Operacionais</title>
+    <title>App de Estudo: Sistemas Operacionais - 2º Bimestre</title>
     <style>
         :root {
-            --primary: #2563EB;
+            --primary: #4F46E5;
             --secondary: #10B981;
             --bg-color: #F3F4F6;
             --card-bg: #FFFFFF;
             --text-main: #1F2937;
             --text-muted: #4B5563;
             --danger: #EF4444;
+            --warning: #F59E0B;
+            --terminal-bg: #111827;
+            --terminal-text: #34D399;
         }
 
         body {
@@ -24,13 +27,8 @@
             line-height: 1.6;
         }
 
-        /* TRUQUE PARA ESCONDER AS CITAÇÕES DO SISTEMA DA IA */
-        .cite {
-            display: none !important;
-        }
-
         header {
-            background-color: var(--primary);
+            background: linear-gradient(135deg, var(--primary), #3730A3);
             color: white;
             padding: 1.5rem 1rem;
             text-align: center;
@@ -52,7 +50,7 @@
 
         .tab-btn {
             flex: 1;
-            min-width: 140px;
+            min-width: 130px;
             padding: 1rem;
             border: none;
             background: none;
@@ -61,12 +59,13 @@
             cursor: pointer;
             border-bottom: 3px solid transparent;
             transition: all 0.2s;
+            white-space: nowrap;
         }
 
         .tab-btn.active {
             color: var(--primary);
             border-bottom: 3px solid var(--primary);
-            background-color: #EFF6FF;
+            background-color: #EEF2FF;
         }
 
         .tab-content {
@@ -86,6 +85,10 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
             border-left: 4px solid var(--primary);
         }
+        
+        .card.comando-card {
+            border-left: 4px solid var(--secondary);
+        }
 
         .card h3 {
             margin-top: 0;
@@ -93,30 +96,31 @@
             border-bottom: 1px solid #E5E7EB;
             padding-bottom: 0.5rem;
         }
-
-        .card h4 { color: #374151; margin-bottom: 0.5rem; }
-
-        .highlight {
-            background-color: #FEF3C7;
-            padding: 0.1rem 0.3rem;
-            border-radius: 4px;
-            font-weight: bold;
-        }
+        
+        .comando-card h3 { color: #059669; }
 
         .cmd-box {
-            background: #1F2937;
-            color: #10B981;
+            background: var(--terminal-bg);
+            color: var(--terminal-text);
             padding: 1rem;
             border-radius: 6px;
-            font-family: monospace;
+            font-family: 'Courier New', Courier, monospace;
             margin: 0.5rem 0;
             overflow-x: auto;
+            font-size: 1.05rem;
+            border-left: 4px solid var(--secondary);
         }
         
         .cmd-desc {
             margin-top: 0.2rem;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        .cmd-desc ul {
+            margin-top: 0.5rem;
+            padding-left: 1.5rem;
         }
 
         /* Flashcards */
@@ -227,6 +231,7 @@
             width: 100%;
             border-collapse: collapse;
             margin: 1rem 0;
+            font-size: 0.9rem;
         }
         th, td {
             border: 1px solid #D1D5DB;
@@ -239,265 +244,300 @@
 <body>
 
     <header>
-        <h1>📚 Revisão de SO: Direto ao Ponto</h1>
-        <p>Teoria aprofundada + Comandos de Laboratório</p>
+        <h1>📚 SO: Sincronização & Comandos</h1>
+        <p>Catálogo Completo de Comandos (A-Z) e Teoria de Sincronização</p>
     </header>
 
     <div class="tabs">
-        <button class="tab-btn active" onclick="openTab(event, 'teoria')">🧠 Teoria (Aprofundada)</button>
-        <button class="tab-btn" onclick="openTab(event, 'comandos')">💻 Laboratório (Comandos)</button>
+        <button class="tab-btn active" onclick="openTab(event, 'comandos')">💻 TODOS OS COMANDOS</button>
+        <button class="tab-btn" onclick="openTab(event, 'teoria')">🧠 Teoria Base</button>
         <button class="tab-btn" onclick="openTab(event, 'flashcards')">🗂️ Flashcards</button>
         <button class="tab-btn" onclick="openTab(event, 'quiz')">🎯 Quiz</button>
     </div>
 
-    <div id="teoria" class="tab-content active">
-        <h2>Conceitos Teóricos Fundamentais</h2>
-        
-        <div class="card">
-            <h3>1. O que é um Sistema Operacional? <span class="cite">[cite: 2957, 2979, 3204]</span></h3>
-            <p>O Sistema Operacional (SO) é o software fundamental que atua como intermediário entre o hardware do computador e os aplicativos do usuário. Ele possui duas grandes responsabilidades clássicas:</p>
-            <ul>
-                <li><strong>Máquina Estendida (ou Virtual):</strong> O hardware nu é complexo e difícil de programar. O SO cria uma "ilusão" de uma máquina muito mais simples, limpa e padronizada (oferecendo abstrações como janelas, arquivos e processos) para que o usuário e o programador não precisem lidar com detalhes físicos do disco ou do processador.</li>
-                <li><strong>Gerenciador de Recursos:</strong> Quando há vários usuários ou programas rodando, o SO gerencia a ordem e o tempo de uso da CPU, a alocação de memória RAM e o acesso aos dispositivos de Entrada/Saída (I/O), garantindo proteção e concorrência ordenada.</li>
-            </ul>
+    <div id="comandos" class="tab-content active">
+        <h2>Guia Definitivo de Comandos (Linux)</h2>
+        <p>Lista exaustiva extraída de todos os módulos de laboratório.</p>
+
+        <div class="card comando-card">
+            <h3>1. Navegação e Arquivos Básicos</h3>
+            <div class="cmd-box">pwd</div><p class="cmd-desc">Print Working Directory. Mostra o caminho da pasta atual.</p>
+            <div class="cmd-box">cd [diretório]</div><p class="cmd-desc">Change Directory. Muda de pasta. `cd` sem argumentos volta para o home.</p>
+            <div class="cmd-box">ls [opções]</div><p class="cmd-desc">Lista arquivos. <b>-l</b> (lista longa detalhada), <b>-ld</b> (detalhes apenas do diretório, sem listar conteúdo).</p>
+            <div class="cmd-box">mkdir [pasta]</div><p class="cmd-desc">Make Directory. Cria diretórios.</p>
+            <div class="cmd-box">rmdir [pasta]</div><p class="cmd-desc">Remove Directory. Remove diretórios, <b>somente se estiverem vazios</b>.</p>
+            <div class="cmd-box">cp [opções] [origem] [destino]</div><p class="cmd-desc">Copy. Copia arquivos. <b>-r</b> para copiar diretórios recursivamente.</p>
+            <div class="cmd-box">mv [origem] [destino]</div><p class="cmd-desc">Move. Move arquivos/diretórios de local, ou os renomeia.</p>
+            <div class="cmd-box">rm [opções] [arquivo]</div><p class="cmd-desc">Remove. Apaga arquivos. <b>-r</b> para apagar pastas e seus conteúdos recursivamente.</p>
+            <div class="cmd-box">touch [arquivo]</div><p class="cmd-desc">Cria um arquivo vazio ou atualiza as timestamps (acesso/modificação) de um já existente.</p>
+            <div class="cmd-box">file [arquivo]</div><p class="cmd-desc">Testa e determina o TIPO de um arquivo lendo seus <i>Magic Numbers</i> (cabeçalho).</p>
+            <div class="cmd-box">alias</div><p class="cmd-desc">Lista os apelidos (atalhos) configurados no Shell BASH.</p>
         </div>
 
-        <div class="card">
-            <h3>2. Arquiteturas e Tipos de SO <span class="cite">[cite: 3491, 3507, 3574, 4304, 4309, 4345]</span></h3>
-            <p>Os SOs evoluíram para lidar com necessidades específicas de processamento:</p>
-            <ul>
-                <li><strong>Batch (Lote):</strong> O usuário não interage com o programa em execução. Os programas são processados em fila (sequencialmente), otimizando a máquina, mas zerando a interatividade.</li>
-                <li><strong>Multiprogramação:</strong> Mantém vários processos na memória ao mesmo tempo. Se o processo "A" pausa para ler o disco (I/O), o SO joga o processo "B" na CPU. Maximiza o uso do hardware.</li>
-                <li><strong>Time-Sharing (Tempo Compartilhado):</strong> É uma evolução da multiprogramação focada na interatividade. A CPU é dividida em pequenas "fatias de tempo" (<i>time slices</i>). Alterna tão rápido entre os processos que cada usuário acha que a máquina é exclusiva dele.</li>
-                <li><strong>Multiprocessamento:</strong> Uso de múltiplas CPUs. Pode ser <strong>Assimétrico</strong> (uma CPU mestre dita as regras e as outras obedecem) ou <strong>Simétrico / SMP</strong> (todas as CPUs são iguais e compartilham a mesma memória).</li>
-                <li><strong>Sistemas Distribuídos:</strong> Várias máquinas (nós) independentes conectadas em rede, cada uma com sua memória local, que parecem um sistema único para o usuário.</li>
-                <li><strong>Sistemas de Tempo Real (Real-Time):</strong> A exatidão temporal é crítica. Subdividido em <strong>Hard</strong> (se perder o prazo/deadline, ocorre uma falha catastrófica - ex: robótica médica, aviões) e <strong>Soft</strong> (se perder o prazo há perda de qualidade, mas não é fatal - ex: streaming de vídeo). O Windows padrão NÃO é de tempo real.</li>
-            </ul>
+        <div class="card comando-card">
+            <h3>2. Buscas, Filtros e Informações do Sistema</h3>
+            <div class="cmd-box">find [onde] [opções]</div>
+            <div class="cmd-desc">
+                Pesquisa avançada recursiva (não usa índice pré-construído). Opções principais:
+                <ul>
+                    <li><b>-name</b>: Busca por nome (ex: `find / -name "*.txt"`).</li>
+                    <li><b>-size +x / -x</b>: Busca por tamanho maior (+) ou menor (-) que x.</li>
+                    <li><b>-type x</b>: Por tipo (<b>f</b>: arquivo, <b>d</b>: diretório, <b>l</b>: link).</li>
+                    <li><b>-user / -group</b>: De um usuário ou grupo específico.</li>
+                    <li><b>-mmin / -mtime</b>: Modificados há X minutos/dias.</li>
+                </ul>
+            </div>
+            <div class="cmd-box">localize (ou slocalize) [nome]</div><p class="cmd-desc">Busca hiper-rápida pois usa um banco de dados pré-indexado.</p>
+            <div class="cmd-box">which [comando]</div><p class="cmd-desc">Encontra o caminho absoluto do executável (baseado na variável PATH).</p>
+            <div class="cmd-box">grep [padrão] [arquivo]</div><p class="cmd-desc">Filtra texto. <b>^padrão</b> (linhas que começam com o padrão).</p>
+            <div class="cmd-box">cut -d [delimitador] -f [coluna]</div><p class="cmd-desc">Corta colunas de texto. Ex: `cut -d: -f1` usa ":" como separador e pega a coluna 1.</p>
+            <div class="cmd-box">env / echo $PATH / export</div><p class="cmd-desc">`env` exibe variáveis de ambiente. `echo $PATH` mostra caminhos de executáveis. `export` adiciona novos paths.</p>
+            <div class="cmd-box">fdisk [disco]</div><p class="cmd-desc">Exibe ou manipula a Tabela de Partições (ex: `fdisk /dev/sda`).</p>
+            <div class="cmd-box">df [opções]</div><p class="cmd-desc">Disk Free. Vê espaço livre do HD montado. <b>-h</b> (human-readable), <b>-k</b> (em Kb), <b>-T</b> (mostra tipo do file system).</p>
+            <div class="cmd-box">uptime [opções]</div><p class="cmd-desc">Mostra há quanto tempo o SO está ligado, usuários e Carga Média. <b>-p</b> (estilo contagem), <b>-s</b> (estilo data).</p>
         </div>
 
-        <div class="card">
-            <h3>3. Gestão de Processos e Context Switch <span class="cite">[cite: 4492, 4557, 4688, 4708]</span></h3>
-            <p>Um processo é um "programa em execução". O kernel gerencia os processos utilizando o <strong>PCB (Process Control Block ou Bloco de Controle de Processo)</strong>, que é uma estrutura de dados que guarda o "estado atual" do processo (onde o Program Counter parou, quais registradores estavam em uso, limites de memória, etc.).</p>
-            <p><strong>Mudança de Contexto (Context Switch):</strong> Quando a CPU precisa sair do Processo A e ir para o Processo B, ela precisa <em>salvar</em> o estado do Processo A no PCB dele, e <em>carregar</em> o estado do Processo B do PCB dele. Isso é custoso e gera latência (Dispatch Latency).</p>
-            <p><strong>Preempção:</strong> É o ato do SO interromper forçadamente um processo que está rodando na CPU para dar lugar a outro (seja porque o tempo dele acabou, ou chegou alguém mais prioritário).</p>
+        <div class="card comando-card">
+            <h3>3. Gerenciamento de Processos (Foreground/Background)</h3>
+            <div class="cmd-box">[comando] &</div><p class="cmd-desc">Joga o processo para o Background.</p>
+            <div class="cmd-box">Ctrl + Z / Ctrl + C</div><p class="cmd-desc">`Ctrl+Z` Suspende/pausa o processo (coloca em background). `Ctrl+C` mata o processo atual no foreground.</p>
+            <div class="cmd-box">bg [%N] / fg [%N]</div><p class="cmd-desc">`bg` retoma execução de um job pausado no background. `fg` traz pro foreground.</p>
+            <div class="cmd-box">jobs</div><p class="cmd-desc">Lista os jobs atuais em background do terminal (+ indica o padrão).</p>
+            <div class="cmd-box">ps [opções]</div>
+            <div class="cmd-desc">
+                Exibe status de processos.
+                <ul>
+                    <li><b>-e / -A</b>: Todos os processos do sistema.</li>
+                    <li><b>-a</b>: Todos (menos do console).</li>
+                    <li><b>-f</b>: Saída completa (árvore). Famoso `ps -ef`.</li>
+                    <li><b>-u</b>: Inclui nome de usuário e hora.</li>
+                    <li><b>-T</b>: Lista as Threads do processo.</li>
+                    <li><b>-p [PID]</b>: Busca só aquele PID.</li>
+                </ul>
+            </div>
+            <div class="cmd-box">pstree [-p]</div><p class="cmd-desc">Mostra os processos em forma de árvore. <b>-p</b> mostra o PID junto.</p>
+            <div class="cmd-box">top [opções] / htop</div>
+            <div class="cmd-desc">
+                Monitores em tempo real. Atalhos essenciais no top:
+                <ul>
+                    <li><b>c</b>: Mostrar caminho absoluto.</li>
+                    <li><b>d</b>: Alterar tempo de atualização (refresh).</li>
+                    <li><b>k</b>: Matar processo.</li>
+                    <li><b>r</b>: Alterar o nice (prioridade).</li>
+                    <li><b>P</b> (Maiúsculo): Ordenar por %CPU.</li>
+                    <li><b>m</b>: Ordenar por %Memória.</li>
+                    <li><b>Shift+H</b>: Mostrar Threads ao invés de Processos.</li>
+                </ul>
+            </div>
+            <div class="cmd-box">pidof [-s] [nome]</div><p class="cmd-desc">Devolve os PIDs daquele programa. <b>-s</b> devolve apenas um único PID.</p>
+            <div class="cmd-box">kill [sinal] [PID] / killall</div>
+            <div class="cmd-desc">
+                Envia sinal ao processo.
+                <ul>
+                    <li><b>Sem argumento</b>: Padrao -15 (SIGTERM).</li>
+                    <li><b>-9 (SIGKILL)</b>: Morte forçada imediata (não salva nada).</li>
+                    <li><b>-STOP</b> / <b>-CONT</b>: Pausa e Continua o processo.</li>
+                    <li><b>killall [-u user] [nome]</b>: Mata todos processos de um nome específico ou de um usuário (-u).</li>
+                </ul>
+            </div>
+            <div class="cmd-box">nice [-n] / renice [-n] [-u]</div><p class="cmd-desc">`nice` inicia processo com prioridade alterada (vai de -20 a +19). `renice` altera o de um já rodando (ex: `renice 10 [PID]` ou `renice 20 -u joao`).</p>
+            <div class="cmd-box">nohup [comando] &</div><p class="cmd-desc">No Hang Up. O processo sobrevive ao logout do terminal.</p>
+            <div class="cmd-box">sleep [tempo]</div><p class="cmd-desc">Pausa execução do bash (2s, 2m, 2h).</p>
+            <div class="cmd-box">time [comando]</div><p class="cmd-desc">Retorna estatísticas de tempo real, de user mode e de kernel (sys) após o comando rodar.</p>
+            <div class="cmd-box">strace [-tt, -c, -T] [comando]</div><p class="cmd-desc">Analisa chamadas de sistema (System Calls). <b>-c</b> coleta contagens, <b>-T</b> vê o tempo gasto na chamada.</p>
         </div>
 
-        <div class="card">
-            <h3>4. Escalonamento da CPU: Algoritmos <span class="cite">[cite: 4775, 4839, 4907, 4975, 5190, 5421]</span></h3>
-            <p>O Escalonador de Curto Prazo (Short-Term Scheduler) escolhe qual processo da "Fila de Prontos" vai para a CPU. A execução de um processo é um ciclo contínuo de <strong>CPU Burst</strong> (uso do processador) e <strong>I/O Burst</strong> (espera por periféricos). Os algoritmos decidem a ordem:</p>
-            
-            <h4>• FCFS (First-Come, First-Served)</h4>
-            <p>Não preemptivo. O primeiro que chega é o primeiro a usar a CPU até terminar. <br><strong>Problema:</strong> Se um processo enorme chegar primeiro, todos os menores vão ficar travados atrás dele (Efeito Comboio), gerando alto tempo de espera médio.</p>
+        <div class="card comando-card">
+            <h3>4. Gerenciamento de Usuários e Grupos</h3>
+            <div class="cmd-box">whoami / id</div><p class="cmd-desc">`whoami` mostra seu login. `id` mostra seu UID, GID e grupos adicionais.</p>
+            <div class="cmd-box">adduser [usuário] / useradd [usuário]</div><p class="cmd-desc">Cria usuário. (Adduser é um script mais amigável, useradd é o comando base).</p>
+            <div class="cmd-box">userdel [-r] [usuário]</div><p class="cmd-desc">Apaga conta. <b>-r</b> apaga também o diretório /home/usuario.</p>
+            <div class="cmd-box">usermod [opções] [usuário]</div>
+            <div class="cmd-desc">
+                Modifica as propriedades da conta:
+                <ul>
+                    <li><b>-l</b>: Altera o nome de login (rename).</li>
+                    <li><b>-aG</b>: Adiciona a um grupo extra sem remover dos atuais.</li>
+                    <li><b>-G</b>: Substitui todos os grupos extra.</li>
+                    <li><b>-d</b> (-m): Altera o diretório home (e -m move o conteúdo).</li>
+                    <li><b>-s</b>: Altera o shell padrão (ex: /bin/bash).</li>
+                    <li><b>-L / -U</b>: Lock (Tranca) e Unlock (Destranca) a conta.</li>
+                    <li><b>-e</b>: Define data de expiração.</li>
+                </ul>
+            </div>
+            <div class="cmd-box">passwd [usuário]</div>
+            <div class="cmd-desc">
+                Altera senhas criptografadas (vai para /etc/shadow).
+                <ul>
+                    <li><b>-l / -u</b>: Lock (tranca senha) e Unlock.</li>
+                    <li><b>-d</b>: Delete (deixa sem senha).</li>
+                    <li><b>-e</b>: Expire (força trocar no próximo login).</li>
+                    <li><b>-S</b>: Status da senha.</li>
+                </ul>
+            </div>
+            <div class="cmd-box">chfn [opções] [usuário]</div><p class="cmd-desc">Change finger. Altera dados informativos: <b>-f</b> (nome completo), <b>-o</b> (sala), <b>-p</b> (tel trab), <b>-h</b> (tel casa).</p>
+            <div class="cmd-box">groupadd / groupmod / groupdel</div><p class="cmd-desc">Gerencia grupos. <b>groupmod</b> possui opções <b>-g</b> (novo GID), <b>-p</b> (senha), <b>-a/-R</b> (add/remove usuários).</p>
+            <div class="cmd-box">groups [usuário]</div><p class="cmd-desc">Mostra os grupos do qual um usuário faz parte.</p>
+            <div class="cmd-box">getent [database]</div><p class="cmd-desc">Busca nos dados do sistema (ex: `getent group` ou `getent passwd`). Ignora se vem de arquivo local ou LDAP.</p>
+            <div class="cmd-box">pwconv</div><p class="cmd-desc">Password Convert. Migra/atualiza as senhas do `/etc/passwd` e cria o mascaramento com "x" jogando a criptografia protegida pro `/etc/shadow`.</p>
+        </div>
 
-            <h4>• SJF (Shortest Job First)</h4>
-            <p>Não preemptivo. Pega o processo com o <strong>menor</strong> tempo de CPU (CPU Burst) da fila e o executa. <br><strong>Vantagem:</strong> É matematicamente o algoritmo que gera o <em>menor tempo médio de espera</em>.<br><strong>Problema:</strong> Na prática, o SO não tem uma bola de cristal para prever o exato tempo futuro que um processo vai gastar na CPU.</p>
-
-            <h4>• SRT (Shortest Remaining Time)</h4>
-            <p>É a versão <strong>preemptiva</strong> do SJF. Se um processo novo chegar com um tempo de CPU menor do que o tempo <em>restante</em> do processo atual, o atual sofre preempção e perde a CPU para o novato.</p>
-
-            <h4>• Escalonamento por Prioridade & Starvation</h4>
-            <p>Preemptivo ou não. Cada processo ganha um número de prioridade (geralmente, número menor = prioridade maior). A CPU vai para a maior prioridade. <br><strong>O grande problema:</strong> <em>Starvation (Inanição)</em>. Processos de baixa prioridade podem ficar travados para sempre se processos de alta prioridade não pararem de chegar. <br><strong>A solução:</strong> <em>Aging (Envelhecimento)</em>, que aumenta gradualmente a prioridade dos processos que estão aguardando há muito tempo.</p>
-
-            <h4>• Round Robin (RR)</h4>
-            <p>Preemptivo. Projetado para Time-Sharing. Cada processo ganha uma fatia de tempo exata chamada <strong>Quantum</strong> (ex: 20ms). Se o processo não terminar dentro do Quantum, ele sofre preempção e vai pro fim da fila. É o mais justo para interatividade. Se o Quantum for muito grande, vira um FCFS. Se for muito pequeno, a máquina perde muito tempo apenas fazendo mudança de contexto.</p>
-            
-            <h4>• Múltiplas Filas (Multilevel Queues)</h4>
-            <p>Divide os processos em várias filas com prioridades distintas (Ex: Fila Foreground usa Round Robin; Fila Background usa FCFS). Em Múltiplas Filas com <em>Feedback</em>, os processos podem transitar entre as filas de acordo com seu comportamento e consumo de CPU.</p>
+        <div class="card comando-card">
+            <h3>5. Permissões e Links (Inodes)</h3>
+            <div class="cmd-box">chmod [opções] [permissões] [arquivo]</div>
+            <div class="cmd-desc">
+                Change Mode. <b>-R</b> altera pastas recursivamente.
+                <br><b>Modo Numérico:</b> (R=4, W=2, X=1). Ex: `chmod 764 file`.
+                <br><b>Modo Simbólico:</b> u (user), g (group), o (other), a (all) com +, - ou =. Ex: `chmod g+x file`.
+            </div>
+            <div class="cmd-box">chown [dono]:[grupo] [arquivo]</div><p class="cmd-desc">Altera o Owner do arquivo.</p>
+            <div class="cmd-box">chgrp [-R] [grupo] [arquivo]</div><p class="cmd-desc">Altera apenas o Group Owner do arquivo.</p>
+            <div class="cmd-box">umask [-S] [valor]</div><p class="cmd-desc">Mascara (SUBTRAI) permissões padrão ao criar novo arquivo. Ex: `umask 022` tira W de grupo/outros. <b>-S</b> mostra resultado de forma simbólica.</p>
+            <div class="cmd-box">ln [-s] [alvo] [link]</div>
+            <div class="cmd-desc">
+                Cria links (ponteiros).
+                <ul>
+                    <li><b>Sem -s</b>: Hard Link (aponta direto pro Inode). Não cruza partição. Se apagar original, o arquivo vive pelo link.</li>
+                    <li><b>Com -s</b>: Symbolic Link (Symlink). Aponta pro caminho (texto). Se o original sumir, fica "quebrado".</li>
+                </ul>
+            </div>
+            <div class="cmd-box">unlink [link]</div><p class="cmd-desc">Remove (deleta) links simbólicos de forma segura.</p>
         </div>
     </div>
 
-    <div id="comandos" class="tab-content">
-        <h2>Comandos de Laboratório Linux/Bash</h2>
-        <p>Foco na sintaxe prática e explicação simples, conforme visto nos guias práticos. <span class="cite">[cite: 785, 792, 845, 898, 925, 946, 1055, 1067, 1092, 1146, 1197, 1251, 1258, 1311, 1522, 1585, 1635, 1649, 1658, 1681, 1705, 1726, 1732, 1737, 1743, 2234, 2252, 2461, 2471, 2494, 2660, 2700, 2755, 2797, 2873, 2883]</span></p>
+    <div id="teoria" class="tab-content">
+        <h2>Revisão Teórica (Concorrência, Threads e Permissões)</h2>
 
         <div class="card">
-            <h3>Navegação e Sistema de Arquivos</h3>
-            <div class="cmd-box">pwd</div>
-            <p class="cmd-desc"><strong>Print Working Directory:</strong> Mostra o caminho absoluto do diretório onde você está no momento.</p>
-            
-            <div class="cmd-box">cd [diretório]</div>
-            <p class="cmd-desc"><strong>Change Directory:</strong> Muda a pasta atual. <code>cd ..</code> sobe um nível. <code>cd /</code> vai para o diretório raiz. Digitar só <code>cd</code> volta para o diretório Home (~) do usuário.</p>
-            
-            <div class="cmd-box">ls [opções]</div>
-            <p class="cmd-desc"><strong>List:</strong> Lista arquivos e diretórios. <br><code>ls -l</code>: lista longa (mostra permissões, dono, tamanho, data).<br><code>ls -a</code>: mostra arquivos ocultos (que começam com ponto).<br><code>ls -lh</code>: mostra o tamanho em formato legível para humanos (MB, GB).</p>
-
-            <div class="cmd-box">mkdir [nome] / rmdir [nome]</div>
-            <p class="cmd-desc"><strong>Make / Remove Directory:</strong> Cria ou remove pastas. O <code>rmdir</code> só apaga a pasta se ela estiver completamente vazia.</p>
-
-            <div class="cmd-box">cp [origem] [destino]</div>
-            <p class="cmd-desc"><strong>Copy:</strong> Copia arquivos. Para copiar pastas e todo seu conteúdo, use <code>cp -r</code> (recursivo).</p>
-
-            <div class="cmd-box">mv [origem] [destino]</div>
-            <p class="cmd-desc"><strong>Move:</strong> Move arquivos de um lugar para outro, <strong>OU</strong> renomeia um arquivo, dependendo do destino informado.</p>
-
-            <div class="cmd-box">rm [arquivo]</div>
-            <p class="cmd-desc"><strong>Remove:</strong> Apaga arquivos. <br><code>rm -r</code>: apaga pastas recursivamente.<br><code>rm -f</code>: força a deleção sem perguntar (cuidado com <code>rm -rf</code>).</p>
-
-            <div class="cmd-box">touch [arquivo]</div>
-            <p class="cmd-desc">Cria um arquivo vazio. Se o arquivo já existir, ele apenas atualiza a data e hora de acesso/modificação do arquivo.</p>
+            <h3>Threads (Processos Leves)</h3>
+            <p>Threads são fluxos de execução dentro de um mesmo processo. Criar/destruir threads é de 10 a 100 vezes mais rápido que criar processos inteiros.</p>
+            <ul>
+                <li><b>O que COMPARTILHAM:</b> Variáveis globais, código, arquivos abertos e espaço de endereçamento (Memória).</li>
+                <li><b>O que NÃO compartilham (Cada thread tem o seu):</b> Pilha (Stack), Registradores e Contador de Programa (PC).</li>
+                <li><b>User vs Kernel:</b> Threads de nível de usuário são invisíveis para o SO e gerenciadas por bibliotecas (mudança de contexto não requer System Call). Threads de nível de Kernel são gerenciadas diretamente pelo SO (ex: Windows).</li>
+            </ul>
         </div>
 
         <div class="card">
-            <h3>Manipulação e Visualização de Texto</h3>
-            <div class="cmd-box">cat [arquivo]</div>
-            <p class="cmd-desc"><strong>Concatenate:</strong> Imprime todo o conteúdo de um arquivo de texto no terminal de uma só vez.</p>
-
-            <div class="cmd-box">more / less</div>
-            <p class="cmd-desc">Mostra o conteúdo de um arquivo grande página por página. O <code>less</code> é mais flexível, permitindo navegar para cima e para baixo.</p>
-
-            <div class="cmd-box">grep [padrão] [arquivo]</div>
-            <p class="cmd-desc">Busca por palavras ou padrões de texto dentro de arquivos. <br><code>grep -i</code>: ignora diferença entre maiúsculas e minúsculas.<br><code>grep -v</code>: inverte a busca (mostra linhas que NÃO contêm a palavra).</p>
+            <h3>Sincronização e Condição de Corrida (Race Condition)</h3>
+            <p><b>Race Condition:</b> Acontece quando várias threads acessam e tentam modificar os mesmos dados ao mesmo tempo, gerando um resultado corrompido que depende de "quem chegou primeiro".</p>
+            <p><b>Região Crítica (Seção Crítica):</b> É o trecho exato de código onde os dados compartilhados são manipulados. Só 1 thread pode estar nela por vez (Exclusão Mútua).</p>
+            <p><b>Espera Ocupada (Busy Waiting):</b> É quando a thread fica em um loop vazio (`while(true)`) gastando muita CPU só pra ver se a trava liberou. É terrível para a performance.</p>
         </div>
 
         <div class="card">
-            <h3>Redirecionamentos e Pipes</h3>
-            <div class="cmd-box">> e >></div>
-            <p class="cmd-desc"><code>></code> (Sobrescreve): Pega a saída de um comando e salva em um arquivo, apagando o que tinha lá.<br><code>>></code> (Adiciona): Salva a saída no final do arquivo, preservando o que já existia (append).</p>
-
-            <div class="cmd-box">| (Pipe)</div>
-            <p class="cmd-desc">Pega a saída do comando da esquerda e joga diretamente na entrada do comando da direita (Ex: <code>ls -l | more</code>).</p>
+            <h3>Mutex vs Semáforos vs Monitores</h3>
+            <table>
+                <tr>
+                    <th>Ferramenta</th>
+                    <th>Característica Principal</th>
+                </tr>
+                <tr>
+                    <td><b>Mutex</b></td>
+                    <td>Fechadura Binária (0 ou 1). Usado estritamente para exclusão mútua. A mesma thread que trancou DEVE ser a que vai destrancar.</td>
+                </tr>
+                <tr>
+                    <td><b>Semáforo</b></td>
+                    <td>Contador Inteiro. Permite que "N" threads acessem um pool de recursos. Usa as primitivas atômicas <b>P (Wait/Down)</b> para bloquear e <b>V (Signal/Up)</b> para liberar. Pode ser alterado por threads diferentes.</td>
+                </tr>
+                <tr>
+                    <td><b>Monitores</b></td>
+                    <td>Módulo de software de alto nível. O compilador garante que os métodos sejam de exclusão mútua automática. Muito mais fácil para o programador do que gerenciar Semáforos na mão.</td>
+                </tr>
+            </table>
         </div>
 
         <div class="card">
-            <h3>Gerenciamento de Processos</h3>
-            <div class="cmd-box">Comando &</div>
-            <p class="cmd-desc">Colocar um <code>&</code> no final de qualquer comando faz com que ele execute em <strong>Background</strong> (segundo plano), liberando o terminal para você continuar usando.</p>
-
-            <div class="cmd-box">Ctrl+Z / bg / fg / jobs</div>
-            <p class="cmd-desc"><code>Ctrl+Z</code>: Suspende/pausa o processo atual.<br><code>jobs</code>: Lista os processos rodando no background.<br><code>bg %1</code>: Retoma a execução do processo 1 em background.<br><code>fg %1</code>: Traz o processo 1 de volta para o primeiro plano (Foreground).</p>
-
-            <div class="cmd-box">ps [opções]</div>
-            <p class="cmd-desc"><strong>Process Status:</strong> Mostra os processos atuais. <br><code>ps -e</code> (ou -A): mostra processos de todos os usuários.<br><code>ps -f</code>: saída completa (full). Ex: <code>ps -ef</code> é muito comum.</p>
-
-            <div class="cmd-box">top / htop</div>
-            <p class="cmd-desc">Monitores de processos dinâmicos. Ficam atualizando a tela em tempo real, mostrando quem consome mais CPU e RAM. O <code>htop</code> é a versão colorida e melhorada.</p>
-
-            <div class="cmd-box">kill / killall</div>
-            <p class="cmd-desc">Envia sinais (geralmente para finalizar processos).<br><code>kill PID</code>: encerra um processo suavemente (SIGTERM -15).<br><code>kill -9 PID</code>: mata forçadamente, sem chance do processo salvar dados (SIGKILL).<br><code>killall [nome]</code>: mata todos os processos que tenham o mesmo nome.</p>
-
-            <div class="cmd-box">nice / renice</div>
-            <p class="cmd-desc">Altera a prioridade de um processo. O valor de prioridade (NI) vai de -20 (prioridade altíssima) a +19 (prioridade baixíssima). O padrão é 0. <br><code>nice</code>: define a prioridade ao iniciar.<br><code>renice</code>: altera a prioridade de um processo já rodando.</p>
-            
-            <div class="cmd-box">nohup</div>
-            <p class="cmd-desc"><strong>No Hang Up:</strong> Garante que o processo continue rodando no background mesmo que você feche a janela do terminal ou faça logout.</p>
-        </div>
-        
-        <div class="card">
-            <h3>Outros Úteis</h3>
-            <p><code>df -h</code> (Vê espaço em disco em MB/GB), <code>uptime</code> (Há quanto tempo o PC está ligado e a carga média), <code>whoami</code> (Mostra seu usuário logado), <code>clear</code> (Limpa a tela do terminal).</p>
+            <h3>Sistemas de Arquivos e Permissões</h3>
+            <p>O Linux gerencia discos dividindo em partições lógicas e usa <b>Inodes</b> para rastrear as informações (metadados: tamanho, dono, ponteiros para blocos). O Inode NÃO guarda o nome do arquivo, quem guarda isso é a estrutura de "diretório".</p>
+            <p><b>Permissões Especiais:</b></p>
+            <ul>
+                <li><b>SUID (Set User ID):</b> Quando você executa o programa, você ganha temporariamente os poderes do DONO do arquivo. Símbolo 's' no lugar do 'x' do usuário (rwsr-xr-x).</li>
+                <li><b>Sticky Bit:</b> Aplicado a diretórios (ex: /tmp). Faz com que apenas o DONO de um arquivo possa apagá-lo ali de dentro, mesmo que a pasta seja de escrita pública. Símbolo 't' no final (rwxrwxrwt).</li>
+            </ul>
         </div>
     </div>
 
     <div id="flashcards" class="tab-content">
-        <h2>Flashcards de Fixação (Toque para Virar)</h2>
-        <p style="text-align:center; color: var(--text-muted); margin-bottom: 2rem;">As questões clássicas de prova baseadas nos PDFs.</p>
-
+        <h2>Flashcards de Revisão (Toque para Virar)</h2>
         <div class="flashcard-grid">
             <div class="flashcard" onclick="this.classList.toggle('flipped')">
                 <div class="flashcard-inner">
-                    <div class="flashcard-front">
-                        O que é a "Inversão de Prioridade" e como a "Inanição (Starvation)" é resolvida?
-                    </div>
-                    <div class="flashcard-back">
-                        <p>Inversão ocorre quando um processo de baixa prioridade trava um de alta. A Inanição ocorre no escalonamento por prioridade e é resolvida pelo <b>Aging (Envelhecimento)</b>: aumentar gradualmente a prioridade dos processos que aguardam há muito tempo.</p>
-                    </div>
+                    <div class="flashcard-front">O que faz o comando `usermod -aG sudo maria`?</div>
+                    <div class="flashcard-back"><p>Adiciona a usuária Maria ao grupo 'sudo' <b>sem removê-la</b> de seus grupos anteriores (graças ao -a de append).</p></div>
                 </div>
             </div>
 
             <div class="flashcard" onclick="this.classList.toggle('flipped')">
                 <div class="flashcard-inner">
-                    <div class="flashcard-front">
-                        Qual a diferença entre os escalonadores SJF e SRT?
-                    </div>
-                    <div class="flashcard-back">
-                        <p>Ambos escolhem o processo mais curto. O <b>SJF</b> é Não-Preemptivo (deixa terminar). O <b>SRT</b> (Shortest Remaining Time) é Preemptivo: se chegar um menor, ele rouba a CPU do atual.</p>
-                    </div>
+                    <div class="flashcard-front">Se eu executar `chmod 751 script.sh`, como ficam as permissões?</div>
+                    <div class="flashcard-back"><p>Usuário = 7 (RWX), Grupo = 5 (R-X), Outros = 1 (--X). O Dono faz tudo, Grupo lê/executa e Outros só executam.</p></div>
                 </div>
             </div>
 
             <div class="flashcard" onclick="this.classList.toggle('flipped')">
                 <div class="flashcard-inner">
-                    <div class="flashcard-front">
-                        Explique a função do Quantum no algoritmo Round Robin.
-                    </div>
-                    <div class="flashcard-back">
-                        <p>Quantum (ou fatia de tempo) é o limite máximo de tempo contínuo que um processo pode usar a CPU por vez. Quando o quantum acaba, o processo sofre preempção e vai pro final da fila.</p>
-                    </div>
+                    <div class="flashcard-front">No Semáforo, o que acontece na operação P (Wait/Down) se o valor for ZERO?</div>
+                    <div class="flashcard-back"><p>A thread é bloqueada (vai dormir) na fila do semáforo, até que alguma outra thread execute a operação V (Signal/Up) incrementando o valor.</p></div>
                 </div>
             </div>
 
             <div class="flashcard" onclick="this.classList.toggle('flipped')">
                 <div class="flashcard-inner">
-                    <div class="flashcard-front">
-                        O que acontece se o SO não tem NENHUM processo pronto para rodar?
-                    </div>
-                    <div class="flashcard-back">
-                        <p>O Escalonador aciona o processo <b>Idle</b> (Processo Ocioso). Ele tem a menor prioridade possível e roda apenas para evitar que a CPU gaste tempo travando/reiniciando ou fazendo busy wait inútil.</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="flashcard" onclick="this.classList.toggle('flipped')">
-                <div class="flashcard-inner">
-                    <div class="flashcard-front">
-                        Como jogar um processo para Background e Background pausado no Linux?
-                    </div>
-                    <div class="flashcard-back">
-                        <p>Use <b>&</b> no final do comando para iniciar direto em background. Se já estiver rodando, aperte <b>Ctrl+Z</b> para suspender e depois digite <b>bg</b> para ele rodar escondido.</p>
-                    </div>
+                    <div class="flashcard-front">Como colocar um processo longo para rodar em 2º plano que continue mesmo fechando o terminal?</div>
+                    <div class="flashcard-back"><p>Usando `nohup [comando] &`. O `&` joga para o background, e o `nohup` (No Hang Up) impede a morte via logout.</p></div>
                 </div>
             </div>
 
             <div class="flashcard" onclick="this.classList.toggle('flipped')">
                 <div class="flashcard-inner">
-                    <div class="flashcard-front">
-                        Para que servem os comandos nice e kill -9?
-                    </div>
-                    <div class="flashcard-back">
-                        <p><b>nice</b> ajusta a prioridade do processo (valores negativos = maior prioridade). <b>kill -9</b> manda o sinal SIGKILL, que força a morte imediata do processo, sem chance de salvar nada.</p>
-                    </div>
+                    <div class="flashcard-front">Threads vs Processos: O que eles NUNCA compartilham entre si?</div>
+                    <div class="flashcard-back"><p>Pilha (Stack), Registradores de CPU e Contador de Programas (PC).</p></div>
+                </div>
+            </div>
+
+            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                <div class="flashcard-inner">
+                    <div class="flashcard-front">Qual a diferença fundamental entre um Hard Link e um Link Simbólico (Soft Link)?</div>
+                    <div class="flashcard-back"><p>Hard Link aponta pro Inode direto (não pode cruzar disco). Link Simbólico (`ln -s`) é um atalho de texto que aponta pro "caminho" e quebra se o original for deletado.</p></div>
                 </div>
             </div>
         </div>
     </div>
 
     <div id="quiz" class="tab-content">
-        <h2>Quiz: Teste de Conhecimento</h2>
+        <h2>Simulado Final</h2>
         
         <div id="quiz-container">
             <div class="quiz-question">
-                <p><strong>1. Em escalonamento de CPU, qual é o conceito principal que diferencia a "Multiprogramação" de antigamente do "Time-Sharing" atual?</strong></p>
-                <label class="quiz-option"><input type="radio" name="q1" value="wrong"> A multiprogramação usa a interface gráfica (GUI), e o Time-Sharing usa o Bash.</label>
-                <label class="quiz-option"><input type="radio" name="q1" value="wrong"> Ambos são estritamente em Lote (Batch).</label>
-                <label class="quiz-option"><input type="radio" name="q1" value="correct"> O Time-Sharing foca na interatividade do usuário, dividindo a CPU em pequenas fatias de tempo (Time Slices) de forma circular.</label>
-                <label class="quiz-option"><input type="radio" name="q1" value="wrong"> A Multiprogramação exige múltiplas CPUs (Multicore), enquanto o Time Sharing usa apenas uma.</label>
+                <p><strong>1. Qual comando permite ver em tempo real (atualização dinâmica) os processos que mais consomem CPU e permite matar processos de dentro de sua interface?</strong></p>
+                <label class="quiz-option"><input type="radio" name="q1" value="wrong"> ps -aux</label>
+                <label class="quiz-option"><input type="radio" name="q1" value="correct"> top / htop</label>
+                <label class="quiz-option"><input type="radio" name="q1" value="wrong"> uptime</label>
             </div>
 
             <div class="quiz-question">
-                <p><strong>2. Qual alternativa reflete CORRETAMENTE a relação de "Preempção" dos algoritmos?</strong></p>
-                <label class="quiz-option"><input type="radio" name="q2" value="wrong"> FCFS é preemptivo e SJF é preemptivo.</label>
-                <label class="quiz-option"><input type="radio" name="q2" value="correct"> FCFS é Não-Preemptivo; Round Robin é sempre Preemptivo.</label>
-                <label class="quiz-option"><input type="radio" name="q2" value="wrong"> SJF é sempre Preemptivo; SRT é Não-Preemptivo.</label>
-                <label class="quiz-option"><input type="radio" name="q2" value="wrong"> Escalonamento por Prioridade nunca sofre preempção.</label>
+                <p><strong>2. Sobre o Umask, assinale a correta:</strong></p>
+                <label class="quiz-option"><input type="radio" name="q2" value="wrong"> O umask atribui permissões. Um umask 777 dá permissão total a todos os usuários em novos arquivos.</label>
+                <label class="quiz-option"><input type="radio" name="q2" value="correct"> O umask MASCARA (retira) permissões. Para que um arquivo nasça sem nenhuma permissão para NINGUÉM, o umask deve ser 777.</label>
+                <label class="quiz-option"><input type="radio" name="q2" value="wrong"> O umask só afeta arquivos antigos já criados.</label>
             </div>
 
             <div class="quiz-question">
-                <p><strong>3. Se o administrador do sistema quiser garantir que o log de um processo seja anexado ao final de um arquivo já existente (sem apagar os dados antigos), qual operador de Bash ele deve usar?</strong></p>
-                <label class="quiz-option"><input type="radio" name="q3" value="wrong"> ></label>
-                <label class="quiz-option"><input type="radio" name="q3" value="correct"> >></label>
-                <label class="quiz-option"><input type="radio" name="q3" value="wrong"> |</label>
-                <label class="quiz-option"><input type="radio" name="q3" value="wrong"> &</label>
+                <p><strong>3. Se a execução simultânea de duas threads altera uma mesma variável, e o resultado final fica errado dependendo de qual thread terminou por último, estamos diante de um(a):</strong></p>
+                <label class="quiz-option"><input type="radio" name="q3" value="correct"> Condição de Corrida (Race Condition)</label>
+                <label class="quiz-option"><input type="radio" name="q3" value="wrong"> Deadlock (Impasse)</label>
+                <label class="quiz-option"><input type="radio" name="q3" value="wrong"> Inanição (Starvation)</label>
             </div>
 
             <div class="quiz-question">
-                <p><strong>4. Analise as afirmativas sobre comandos Linux e marque a CORRETA:</strong></p>
-                <label class="quiz-option"><input type="radio" name="q4" value="wrong"> "pwd" troca o usuário para root.</label>
-                <label class="quiz-option"><input type="radio" name="q4" value="correct"> "mv" pode ser utilizado tanto para mover arquivos de diretório quanto para renomeá-los.</label>
-                <label class="quiz-option"><input type="radio" name="q4" value="wrong"> "grep" remove diretórios não vazios.</label>
-                <label class="quiz-option"><input type="radio" name="q4" value="wrong"> "cat" é utilizado exclusivamente para visualizar o status atual da memória RAM.</label>
+                <p><strong>4. Ao gerenciar um servidor Linux, você suspendeu o processo atual com `Ctrl+Z`. O processo parou totalmente. Qual comando você digita no terminal para que ele volte a processar sem prender o terminal (em segundo plano)?</strong></p>
+                <label class="quiz-option"><input type="radio" name="q4" value="correct"> bg</label>
+                <label class="quiz-option"><input type="radio" name="q4" value="wrong"> fg</label>
+                <label class="quiz-option"><input type="radio" name="q4" value="wrong"> nohup</label>
             </div>
 
-            <button class="quiz-btn" onclick="checkQuiz()">Corrigir Quiz</button>
+            <button class="quiz-btn" onclick="checkQuiz()">Corrigir Respostas</button>
         </div>
     </div>
 
